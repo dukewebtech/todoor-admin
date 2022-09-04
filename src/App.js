@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { lazy } from "react";
+import "./App.css";
+import AppThemeProvider from "AppThemeProvider";
+import { Icon, IconButton } from "@mui/material";
+import { SnackbarProvider } from "notistack";
+import { notistackRef } from "constants/RefConstants";
+import Suspense from "common/Suspense";
+import useAuthUser from "hooks/useAuthUser";
 
 function App() {
+  const authUser = useAuthUser();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppThemeProvider>
+      <SnackbarProvider
+        ref={notistackRef}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+        preventDuplicate
+        action={(key) => (
+          <IconButton
+            onClick={() => {
+              notistackRef.current.closeSnackbar(key);
+            }}
+            color="inherit"
+            size="small"
+          >
+            <Icon>close</Icon>
+          </IconButton>
+        )}
+      >
+        <Suspense>
+          <AppPublic />
+          {!!authUser?.accessToken && <AppProtected />}
+        </Suspense>
+      </SnackbarProvider>
+    </AppThemeProvider>
   );
 }
 
 export default App;
+
+const AppPublic = lazy(() => import("./AppPublic"));
+const AppProtected = lazy(() => import("./AppProtected"));
