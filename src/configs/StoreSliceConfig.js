@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { logoutAction } from "./StoreActionConfig";
 import UserApi from "apis/UserApi";
+import SignupApi from "apis/SignupApi";
 
 export const globalInitialState = {
   themeMode: "light", // 'dark'| 'light' | 'media'
@@ -21,6 +22,12 @@ const slice = createSlice({
     builder
       .addCase(logoutAction, () => ({ ...globalInitialState }))
       .addMatcher(UserApi.endpoints.login.matchFulfilled, (state, payload) => {
+        state.authUser = {
+          accessToken: payload.data?.accessToken,
+          ...payload.data?.profile,
+        };
+      })
+      .addMatcher(UserApi.endpoints.signup.matchFulfilled, (state, payload) => {
         state.authUser = {
           accessToken: payload.data?.accessToken,
           ...payload.data?.profile,

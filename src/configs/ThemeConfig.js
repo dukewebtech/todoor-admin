@@ -1,3 +1,4 @@
+import { red } from "@mui/material/colors";
 import { createTheme, alpha } from "@mui/material/styles";
 import { DateFormatEnum } from "constants/DateContants";
 
@@ -18,9 +19,16 @@ export function customizeComponents(theme) {
         main: "#006600",
       },
       secondary: {
-        main: "#006600",
+        main: "#000051",
       },
+      tetiary: {
+        main: "#5B0877",
+      },
+
+      
     },
+
+    
     breakpoints: {
       values: {
         xs: 0,
@@ -32,10 +40,11 @@ export function customizeComponents(theme) {
       },
     },
     typography: {
-      fontFamily: ["'Merriweather'", "serif"].join(),
+      fontFamily: ["Merriweather", "serif"].join(),
       fontSize: 12,
       button: {
         textTransform: "none",
+        width: 'w-28'
       },
     },
     components: {
@@ -77,16 +86,51 @@ export function customizeComponents(theme) {
         },
       },
       MuiTextField: {
-        defaultProps: {
-          size: "small",
+        
+        // defaultProps: {
+        //   size: "small",
+          
+        // },
+        styleOverrides: {
+          root: ({ theme, ownerState }) => ({
+            // "&.MuiInputBase-formControl": {
+              borderRadius: 24,
+              // minWidth:295
+            // },
+          }),
         },
       },
       MuiInputBase: {
+        defaultProps: {
+          size: "small",
+          // InputProps: {
+          //   borderRadius: 24,
+          // },
+        },
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
-            "&.MuiInputBase-formControl": {
               borderRadius: 24,
-            },
+              // backgroundColor: red
+          }),
+        },
+      },
+      MuiInput: {
+        defaultProps: {
+          variant: "contained",
+        },
+        styleOverrides: {
+          root: ({ theme, ownerState }) => ({
+            borderRadius: 24,
+          }),
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          root: ({ theme, ownerState }) => ({
+            // "&.MuiInputBase-formControl": {
+              borderRadius: 24,
+              // minWidth:295
+            // },
           }),
         },
       },

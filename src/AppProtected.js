@@ -31,4 +31,8 @@ const ROUTES = configureRoutes([
     path: RouteEnum.HOME,
     element: lazy(() => import("features/home/Home")),
   },
+  {
+    path: RouteEnum.LOGIN,
+    element: lazy(() => import("features/login/Login")),
+  },
 ]);

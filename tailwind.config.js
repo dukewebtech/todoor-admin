@@ -77,6 +77,10 @@ module.exports = {
         snackbar: 1400,
         tooltip: 1500,
       },
+      padding: {
+        general: '1% 7%',
+          },
+     
     },
   },
   plugins: [],
