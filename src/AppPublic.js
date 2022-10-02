@@ -11,10 +11,10 @@ function AppPublic() {
 }
 
 const ROUTES = configureRoutes([
-  {
-    path: "*",
-    element: <Navigate to={RouteEnum.HOME} replace />,
-  },
+  // {
+  //   path: "*",
+  //   element: <Navigate to={RouteEnum.HOME} replace />,
+  // },
   {
     path: RouteEnum.HOME,
     element: lazy(() => import("features/home/Home")),

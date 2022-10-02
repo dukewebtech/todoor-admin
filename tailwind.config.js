@@ -11,6 +11,8 @@ module.exports = {
           lighter: "var(--color-primary-lighter)",
           dark: "var(--color-primary-dark)",
           contrastText: "var(--color-primary-contrastText)",
+          
+         
         },
         secondary: {
           main: "var(--color-secondary-main)",
@@ -49,6 +51,7 @@ module.exports = {
         text: {
           primary: "var(--color-text-primary)",
           secondary: "var(--color-text-secondary)",
+          tetiary: "red",
           disabled: "var(--color-text-disabled)",
         },
         background: {
@@ -63,6 +66,7 @@ module.exports = {
           disabledBackground: "var(--color-action-disabledBackground)",
           focus: "var(--color-action-focus)",
         },
+
       },
       fontFamily: {
         inherit: ["inherit"],
@@ -79,7 +83,11 @@ module.exports = {
       },
       padding: {
         general: '1% 7%',
-          },
+      },
+      fontSize: {
+        ssm: '0.6rem',
+        
+      }
      
     },
   },

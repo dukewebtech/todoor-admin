@@ -24,6 +24,15 @@ export function customizeComponents(theme) {
       tetiary: {
         main: "#5B0877",
       },
+      cardhead: {
+        main: "#858585",
+      },
+      buttonhead: {
+        main: "#EBEBEB",
+      },
+      
+
+      
 
       
     },
@@ -40,7 +49,7 @@ export function customizeComponents(theme) {
       },
     },
     typography: {
-      fontFamily: ["Merriweather", "serif"].join(),
+      fontFamily: ["DM+Sans", "serif"].join(),
       fontSize: 12,
       button: {
         textTransform: "none",
@@ -81,7 +90,7 @@ export function customizeComponents(theme) {
         },
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
-            borderRadius: 24,
+            // borderRadius: 24,
           }),
         },
       },

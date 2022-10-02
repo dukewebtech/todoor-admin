@@ -74,7 +74,7 @@ const {count}= props.payload
             type:type,
             count: count + 1
         })
-      localStorage.setItem('location', values.location)
+      // localStorage.setItem('location', values.location)
         // redirect()
 
       // try {

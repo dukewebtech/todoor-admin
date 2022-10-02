@@ -1,8 +1,13 @@
 export const RouteEnum = {
   HOME: "/",
-  DASHBOARD: "/",
+  // DASHBOARD: "/",
   LOGIN: "/login",
-  SIGNUP: "/signup",
-  // SIGNUPCLIENT: "/signup-client",
+  SIGNUP: "/complete-signUp",
+  DASHBOARD: "/dashboard",
   SIGNUPCLIENT: "/signup-client",
+  MANAGE_COMPANIES:"/manage-companies",
+  MANAGE_RIDERS:"/manage-riders",
+  TRIPS:"/trips",
+  MAPS:"/maps",
+  SUPPORT:"/support",
 };

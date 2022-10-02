@@ -73,8 +73,8 @@ const { count}= props.payload
           });
         
     
-    console.log(localStorage.getItem ('type'))
-    console.log(localStorage.getItem ('location'))
+    // console.log(localStorage.getItem ('type'))
+    // console.log(localStorage.getItem ('location'))
 
 
    
