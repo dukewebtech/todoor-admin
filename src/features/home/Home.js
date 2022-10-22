@@ -69,19 +69,19 @@ function Home(props) {
     onSubmit: async (values) => {
       console.log(values);
       localStorage.setItem("il", true);
-      // redirect();
+      redirect();
       // history('/dashboard')
 
-      try {
-        const data = await loginMuation({ data: values }).unwrap();
-        // TODO extra login
-        enqueueSnackbar("Logged in successful", { variant: "success" });
-        redirect();
-      } catch (error) {
-        enqueueSnackbar(error?.data?.message, "Failed to login", {
-          variant: "error",
-        });
-      }
+      // try {
+      //   const data = await loginMuation({ data: values }).unwrap();
+      //   // TODO extra login
+      //   enqueueSnackbar("Logged in successful", { variant: "success" });
+      //   redirect();
+      // } catch (error) {
+      //   enqueueSnackbar(error?.data?.message, "Failed to login", {
+      //     variant: "error",
+      //   });
+      // }
     },
   });
 
