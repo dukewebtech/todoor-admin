@@ -49,16 +49,25 @@ import {
 import { MdRefresh } from "react-icons/md";
 import ToDoorSearch from "common/ToDoorSearch";
 function ManageRiders(props) {
-  const [age, setAge] = React.useState("");
-  const handleChange = (event) => {
-    setAge(event.target.value);
-    console.log(event);
-  };
+ 
   const history = useNavigate();
+
+   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
+   const totalRiders = getAllRIderQueryResult?.data?.data;
 
   const redirect = () => {
     history("/complete-signUp");
   };
+
+  const allRiders = totalRiders?.map((e) => ({
+    image: e?.profileUrl,
+    name: `${e?.fname}`,
+    company: "GIG Logistics",
+    id: e._id,
+    ratings: e.userRating && e.userRating !== 0 ? e.userRating : "4",
+  }));
+
+  console.log(allRiders)
 
   const tableArray = [
     {
@@ -66,16 +75,18 @@ function ManageRiders(props) {
       name: "Nickky Samuel jonas  ",
       company: "GIG Logistics",
       Id: "2234456",
-      ratings: "4",
+      userRating: "4",
     },
 
-    {
-      image: gigLogo,
-      name: "John jimmy Samuel  ",
-      company: "GIG Logistics",
-      Id: "2234456",
-      ratings: "4",
-    },
+    
+
+    // {
+    //   image: gigLogo,
+    //   name: "John jimmy Samuel  ",
+    //   company: "GIG Logistics",
+    //   Id: "2234456",
+    //   ratings: "4",
+    // },
   ];
 
   const authUser = useAuthUser();
@@ -131,7 +142,7 @@ function ManageRiders(props) {
             big={true}
             green={true}
             name="Total Riders"
-            count="20K"
+            count={totalRiders?.length}
           />
         </div>
         <div>
@@ -174,7 +185,7 @@ function ManageRiders(props) {
       <Typography variant="h5" className="font-bold mt-8 text-primary-main">
         All Riders
       </Typography>
-      {tableArray.map((e) => (
+      {allRiders?.map((e) => (
         <ManageCompaniesTable tableArray={e} />
       ))}
 

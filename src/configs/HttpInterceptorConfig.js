@@ -1,13 +1,20 @@
 import store from "./StoreConfig";
 import { logoutAction } from "./StoreActionConfig";
 import { SoftworkHttp } from "./HttpConfig";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
+
+
+console.log(store.getState().global.authUser);
 SoftworkHttp.interceptors.request.use((config) => {
     const { accessToken } =
         store.getState().global.authUser || {};
 
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
+        // cookies.set('token',accessToken)
+        localStorage.setItem("token", accessToken);
 
     }
 

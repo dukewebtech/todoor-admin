@@ -23,9 +23,10 @@ const slice = createSlice({
       .addCase(logoutAction, () => ({ ...globalInitialState }))
       .addMatcher(UserApi.endpoints.login.matchFulfilled, (state, payload) => {
         state.authUser = {
-          accessToken: payload.data?.accessToken,
-          ...payload.data?.profile,
+          accessToken: payload.payload.data?.jwtAccessToken,
+          ...payload.payload.data?.user,
         };
+
       })
       .addMatcher(UserApi.endpoints.signup.matchFulfilled, (state, payload) => {
         state.authUser = {
@@ -34,6 +35,9 @@ const slice = createSlice({
         };
       }),
 });
+
+        // console.log(globalInitialState);
+
 
 export const { toggleLoadingModalAction } = slice.actions;
 

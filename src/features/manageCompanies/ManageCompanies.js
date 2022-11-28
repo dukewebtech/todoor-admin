@@ -14,6 +14,8 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
+import { post, get, put } from "services/fetch";
+
 // import ManageCompanyCard from 'common/ManageCompanyCard'
 
 // import { RouteEnum } from "constants/RouteConstants";
@@ -44,12 +46,17 @@ import { RiArrowLeftSLine } from "react-icons/ri";
 import ManageCompaniesTable from "./ManageCompaniesTable";
 import NewWallCards from "common/NewWallCards";
 import ToDoorSearch from "common/ToDoorSearch";
+import { useDispatch } from "react-redux";
 
 function ManageCompanies(props) {
+  // const dispatch = useDispatch
   const [show, setShow] = useState(false);
+  const [companyRiders, setCompanyRiders] = useState([]);
+  const [companyEarns, setCompanyEarns] = useState([]);
+  const [companyId, setCompanyId] = useState();
   const handleShow = (event) => {
     setShow(!show);
-    console.log("john");
+    // console.log("john");
   };
   const history = useNavigate();
 
@@ -57,10 +64,28 @@ function ManageCompanies(props) {
     history("/complete-signUp");
   };
 
+  //   const ridersUnderCompany = async (userId) => {
+  //     const res = await get({
+  //       endpoint: `api/super-admin/company/getalluser?userType=company
+  // `,
+  //       //  body: { ...payload },
+  //       auth: true,
+  //     });
+  //     console.log(userId);
+  //   };
+
   const top100Films = [
     { label: "Edo State", year: 1994 },
     { label: "Oredo", year: 1972 },
   ];
+
+  const tabloid = companyRiders.map((e) => ({
+    image: gigLogo,
+    name: e?.fname,
+    company: e?.companyName,
+    id: e?._id,
+    ratings: e?.userRating,
+  }));
 
   const tableArray = [
     {
@@ -115,27 +140,67 @@ function ManageCompanies(props) {
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
+  const getAllCompanyQueryResult = UserApi.useGetAllQuery({
+    userType: "company",
+  });
+  const totalCompanies = getAllCompanyQueryResult?.data?.data;
+  console.log(totalCompanies);
+
+  const functionHook = () => {
+    //  dispatch(UserApi.useLoginMutation());
+  };
+
+  const ridersUnderCompany = async (companyId) => {
+    const res = await get({
+      endpoint: `api/super-admin/getAllRidersCompany?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    setCompanyRiders(res.data.data);
+  };
+
+  const ridersUnderCompanyR = async (companyId) => {
+    const res = await get({
+      endpoint: `api/super-admin/getAllRidersCompany?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    return (res.data.data.length);
+  };
+
+  const companyEarnings = async (companyId) => {
+    const res = await get({
+      endpoint: `api/super-admin/companyTotalEarningStats?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    setCompanyEarns(res.data.data);
+  };
+
+ 
 
   return (
     <div>
       <ToDoorSearch />
       {!show && (
         <div>
-          <div className="flex justify-between my-7">
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
+          <div class="flex flex-wrap gap-6">
+            {totalCompanies?.map((e) => (
+              <div
+                onClick={() => {
+                  ridersUnderCompany(e._id);
+                  companyEarnings(e._id);
+                }}
+                className="w-[32%] mt-3"
+              >
+                <ManageCompanyCard companyDetails={e} handleShow={handleShow} />
+              </div>
+            ))}
           </div>
-          <div className="flex justify-between my-7">
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
-          </div>
-          <div className="flex justify-between my-7">
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
-            <ManageCompanyCard handleShow={handleShow} />
-          </div>
+         
         </div>
       )}
 
@@ -175,11 +240,9 @@ function ManageCompanies(props) {
                 small={true}
                 bigspace={true}
                 name="Riders"
-                count="20"
+                count={companyRiders.length}
               />
-              {/* <WallCards name='Total Raiders' count='116,019'/> */}
-              {/* <WallCards name='Rides in progress' count='13'/>
-              <WallCards name='Active vehicles' count='8'/> */}
+           
               <NewWallCards
                 dashboard={true}
                 small={true}
@@ -200,17 +263,14 @@ function ManageCompanies(props) {
 
             <div className="flex justify-between items-end">
               <Autocomplete
-                // clearIcon={<p></p>}
-                // variant=''
+               
                 className="mr-3"
-                // disablePortal
                 id="combo-box-demo"
                 options={top100Films}
                 sx={{ width: 200 }}
                 renderInput={(params) => <TextField {...params} />}
               />
               <Autocomplete
-                // disablePortal
                 id="combo-box-demo"
                 options={top100Films}
                 sx={{ width: 200 }}
@@ -219,7 +279,7 @@ function ManageCompanies(props) {
             </div>
           </div>
 
-          {tableArray.map((e) => (
+          {tabloid.map((e) => (
             <ManageCompaniesTable tableArray={e} />
           ))}
         </div>

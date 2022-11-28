@@ -92,24 +92,23 @@ function ToDoorSearch(props) {
 
   return (
     <div>
-        {/* <span className="text-xs mr-1 opacity-50">
+      {/* <span className="text-xs mr-1 opacity-50">
           <MdRefresh />
         </span> */}
-        <TextField
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="start">
-                <MdOutlineSearch />
-              </InputAdornment>
-            ),
-          }}
-          variant="outlined"
-          style={{ backgroundColor: "#EBEBEB", border: "none" }}
-          className="w-[30%] mb-5 text-ssm"
-          placeholder="Search Company "
-        />
-        <Divider className="mb-8" />
-        
+      <TextField
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="start">
+              <MdOutlineSearch />
+            </InputAdornment>
+          ),
+        }}
+        variant="outlined"
+        style={{ backgroundColor: "#EBEBEB", border: "none" }}
+        className="w-[30%] mb-5 text-ssm"
+        placeholder="Search Company "
+      />
+      <Divider className="mb-8" />
     </div>
   );
 }

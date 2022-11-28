@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserApi from "apis/UserApi";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -16,6 +16,10 @@ import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
 import background from "images/background.png";
 import gigLogo from "images/Ellipse 56.png";
+import axiosConn from "apis/ApiClient";
+import axios from "axios";
+  import { post, get, put } from "services/fetch";
+
 
 // import { RouteEnum } from "constants/RouteConstants";
 // import ReactDOM from 'react-dom';
@@ -38,8 +42,10 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function ManageCompanyCard(props) {
+function ManageCompanyCard({companyDetails,
+handleShow, companyId}) {
   const [age, setAge] = React.useState("");
+  // const [companyId, setCompanyId] = React.useState("636e237ced577dba2688816b");
   const handleChange = (event) => {
     setAge(event.target.value);
     console.log(event);
@@ -55,33 +61,30 @@ function ManageCompanyCard(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [loginMuation, loginMutationResult] = UserApi.useLoginMutation();
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: yup.object({
-      username: yup.string().trim().required(),
-      password: yup.string().trim().required(),
-    }),
-    onSubmit: async (values) => {
-      console.log(values);
-      // localStorage.setItem('location', values.location)
-      redirect();
+ const deleteRider = async () => {
+   const res = await get({
+     endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
+     //  body: { ...payload },
+     auth: true,
+   });
+   console.log(res.data.data);
+  //  setCompanyEarns(res.data.data);
+ };
 
-      try {
-        const data = await loginMuation({ data: values }).unwrap();
-        // TODO extra login
-        // redirect()
-        enqueueSnackbar("Logged in successful", { variant: "success" });
-      } catch (error) {
-        enqueueSnackbar(error?.data?.message, "Failed to login", {
-          variant: "error",
-        });
-      }
-    },
-  });
+ const ridersUnderCompanyR = async (companyId) => {
+   const res = await get({
+     endpoint: `api/super-admin/getAllRidersCompany?userId=${companyId}`,
+     //  body: { ...payload },
+     auth: true,
+   });
+   console.log(res.data.data);
+   return res.data.data.length;
+ };
 
+
+
+ console.log(companyDetails._id)
+ 
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
@@ -94,7 +97,9 @@ function ManageCompanyCard(props) {
       >
         <CardContent className="">
           <div
-            onClick={props.handleShow}
+            onClick={() => {
+              handleShow();
+            }}
             className="flex pb-2  cursor-pointer"
             style={{ backGroundColor: "#EBEBEB" }}
           >
@@ -103,8 +108,12 @@ function ManageCompanyCard(props) {
               className="ml-2 text-left"
               style={{ backGroundColor: "#EBEBEB" }}
             >
-              <Typography variant="h6">GIG Logistics</Typography>
-              <p className="medium-size cardhead">Apapa, Lagos</p>
+              <Typography variant="h6">
+                {companyDetails?.fname || "GIG Logistics"}
+              </Typography>
+              <p className="medium-size cardhead">
+                {companyDetails?.companyLocation || "Apapa Lagos"}
+              </p>
             </div>
           </div>
 
@@ -128,6 +137,8 @@ function ManageCompanyCard(props) {
                 <div>
                   <Typography className="ml-14 mt-1 font-bold text-sm">
                     33 Riders
+                    {/* {ridersUnderCompanyR()} */}
+                    {/* {ridersUnderCompany(companyDetails?._id)} */}
                   </Typography>
                 </div>
               </div>

@@ -110,7 +110,7 @@ function NewWallCards(props) {
           minHeight: props.big ? 160 : 120,
         }}
       >
-        <div className={props.bigspace?" pr-10":'px-5'}>
+        <div className={props.bigspace ? " pr-10" : "px-5"}>
           <div>
             <Typography
               className={

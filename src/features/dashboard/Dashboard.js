@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserApi from "apis/UserApi";
 import { useFormik } from "formik";
 import { MdRefresh, MdOutlineSearch, MdSearch } from "react-icons/md";
@@ -45,13 +45,35 @@ import WallCards from "common/WallCards";
 import { AccountCircle } from "@mui/icons-material";
 import ToDoorSearch from "common/ToDoorSearch";
 import ManageCompanyCard from "features/manageCompanies/ManageCompanyCard";
+import { post, get, put } from "services/fetch";
+import SuperAdminApi from "apis/UserApi";
 
 function Signup(props) {
-  const [age, setAge] = React.useState("");
-  const [show, setshow] = React.useState();
+  const [userType, setUserType] = React.useState("");
+  const [show, setshow] = React.useState(false);
+  const [filtered, setFiltered] = React.useState([]);
+
+  //  const getUserStatsQueryResult = UserApi.useGetStatsQuery();
+  //  console.log(getUserStatsQueryResult);
+  //  const userStats = getUserStatsQueryResult?.data?.data;
+
+  const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
+  const totalRiders = getAllRIderQueryResult?.data?.data;
+
+  const getAllCompanyQueryResult = UserApi.useGetAllQuery({
+    userType: "company",
+  });
+  const totalCompanies = getAllCompanyQueryResult?.data?.data;
+
+  const getAllCustomerQueryResult = UserApi.useGetAllQuery({
+    userType: "customer",
+  });
+  const totalCustomers = getAllCustomerQueryResult?.data?.data;
+
+  //  console.log(getAllQueryResult.data.data);
+
   const handleChange = (event) => {
-    setAge(event.target.value);
-    console.log(event);
+    // setAge(event.target.value);
   };
   const history = useNavigate();
 
@@ -61,39 +83,51 @@ function Signup(props) {
 
   const authUser = useAuthUser();
 
-  const { enqueueSnackbar } = useSnackbar();
-  const [loginMuation, loginMutationResult] = UserApi.useLoginMutation();
+  // const { enqueueSnackbar } = useSnackbar();
+  // const [loginMuation, loginMutationResult] = UserApi.useLoginMutation();
 
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validationSchema: yup.object({
-      username: yup.string().trim().required(),
-      password: yup.string().trim().required(),
-    }),
-    onSubmit: async (values) => {
-      console.log(values);
-      // localStorage.setItem('location', values.location)
-      redirect();
+  // const formik = useFormik({
+  //   initialValues: {
+  //     username: "",
+  //     password: "",
+  //   },
+  //   validationSchema: yup.object({
+  //     username: yup.string().trim().required(),
+  //     password: yup.string().trim().required(),
+  //   }),
+  //   onSubmit: async (values) => {
+  //     console.log(values);
+  //     // localStorage.setItem('location', values.location)
+  //     redirect();
 
-      try {
-        const data = await loginMuation({ data: values }).unwrap();
-        // TODO extra login
-        // redirect()
-        enqueueSnackbar("Logged in successful", { variant: "success" });
-      } catch (error) {
-        enqueueSnackbar(error?.data?.message, "Failed to login", {
-          variant: "error",
-        });
-      }
-    },
-  });
+  //     try {
+  //       const data = await loginMuation({ data: values }).unwrap();
+  //       // TODO extra login
+  //       // redirect()
+  //       enqueueSnackbar("Logged in successful", { variant: "success" });
+  //     } catch (error) {
+  //       enqueueSnackbar(error?.data?.message, "Failed to login", {
+  //         variant: "error",
+  //       });
+  //     }
+  //   },
+  // });
 
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
+  const filterRiders = (text) => {
+    console.log(text);
+    console.log(totalRiders);
+    // let kk =
+    let pp = totalRiders.filter(
+      (e) => e.fname?.toLowerCase().includes(text?.toLowerCase())
+    );
+    // let kk = totalRiders.map((e) => e.fname);
+    setFiltered(pp);
+    // console.log(kk.filter((e) => text?.toLowerCase() == e?.toLowerCase()));
+    // console.log(kk);
+  };
 
   return (
     <div>
@@ -111,12 +145,16 @@ function Signup(props) {
           <WallCards
             dashboard={true}
             green={true}
-            name="Total Riders"
-            count="20"
+            name="Total Companies"
+            count={totalCompanies && totalCompanies?.length}
           />
         </div>
         <div className="mr-3">
-          <WallCards dashboard={true} name="Total Raiders" count="116,019" />
+          <WallCards
+            dashboard={true}
+            name="Total Raiders"
+            count={totalRiders && totalRiders?.length}
+          />
         </div>
         <div className="mr-3">
           <WallCards dashboard={true} name="Rides in progress" count="13" />
@@ -151,7 +189,10 @@ function Signup(props) {
       <Divider className="my-3" />
       <div className="flex items-center w-2/3 mt-4">
         <TextField
-          onChange={(e) => setshow(e.target.value)}
+          onChange={(e) => {
+            filterRiders(e.target.value);
+            // setshow(e.target.value)
+          }}
           // style={{ backgroundColor: "#EBEBEB", border: "none" }}
           className="w-full bg-[#EBEBEB]"
           placeholder="Search with Email address, Phone number, Name "
@@ -165,19 +206,17 @@ function Signup(props) {
         />
         <Button className="p-3 w-1/3 ml-4">Search</Button>
       </div>
-      {show && (
-        <div className="flex justify-between items-center mt-8">
-          <div className="mr-4  w-2/6">
-            <CompanyRiderCard />
-          </div>
-          <div className="mr-4 w-2/6">
-            <CompanyRiderCard />
-          </div>
-          <div className="mr-4 w-2/6">
-            <CompanyRiderCard />
-          </div>
+      {filtered && filtered.length > 0 && 
+        <div className="flex gap-6 items-center mt-8 flex-wrap">
+          {filtered.map((e) => (
+            <div className="mr-4  w-3/12">
+              <CompanyRiderCard filtered={e} />
+            </div>
+          ))}
+
+         
         </div>
-      )}
+      }
     </div>
   );
 }

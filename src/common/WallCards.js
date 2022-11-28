@@ -123,7 +123,7 @@ function WallCards(props) {
                   ? "text-center text-secondary-light z-10"
                   : "text-center text-primary-main font-bold z-10"
               }
-              style={{ fontSize: 12,zIndex:100  }}
+              style={{ fontSize: 12, zIndex: 100 }}
             >
               {props.name || "Total Companies"}
             </Typography>

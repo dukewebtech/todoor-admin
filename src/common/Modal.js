@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { RiErrorWarningLine } from "react-icons/ri";
+import { post, get, put } from "services/fetch";
 
 
 const style = {
@@ -19,11 +20,21 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({closeModal, openModal, suspend}) {
+export default function BasicModal({closeModal, openModal, suspend,companyId}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log(companyId)
 
+  const deleteRider = async () => {
+    const res = await get({
+      endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    //  setCompanyEarns(res.data.data);
+  };
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
@@ -48,7 +59,7 @@ export default function BasicModal({closeModal, openModal, suspend}) {
               </div>
               <div className="mt-4">
                 <Typography className="mb-4" variant="h6">
-                  {suspend ? 'Suspend': 'Delete'} Account
+                  {suspend ? "Suspend" : "Delete"} Account
                 </Typography>
                 <p>
                   Are you sure you want to delete this rider? This action cannot
@@ -63,7 +74,12 @@ export default function BasicModal({closeModal, openModal, suspend}) {
                 >
                   Cancel
                 </Button>{" "}
-                <Button className="w-[80%] bg-[#FF2828]">Delete</Button>
+                <Button
+                  onClick={() => deleteRider()}
+                  className="w-[80%] bg-[#FF2828]"
+                >
+                  Delete
+                </Button>
               </div>
             </div>
           </div>
