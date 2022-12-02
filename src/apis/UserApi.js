@@ -41,6 +41,17 @@ export const UserApi = SoftwrkApi.injectEndpoints({
       },
     }),
 
+    getAllTrips: builder.query({
+      query: (arg) => {
+        // const { userType } = arg;
+        return {
+          url: `${BASE_URL}/super-admin/getAllTripRequest`,
+          method: "GET",
+          // params: { userType },
+        };
+      },
+    }),
+
     // getAllRidersForCompany: builder.query({
     //   query: (arg) => {
     //     const { userId } = arg;

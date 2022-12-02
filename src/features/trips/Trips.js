@@ -67,6 +67,12 @@ function Trips(props) {
     history("/complete-signUp");
   };
 
+   const getAllCompanyQueryResult = UserApi.useGetAllTripsQuery({
+    //  userType: "company",
+   });
+   const totalTrips = getAllCompanyQueryResult?.data;
+   console.log(totalTrips)
+
   function createData(
     origin,
     destination,
@@ -197,21 +203,7 @@ function Trips(props) {
     setRoute(e);
   };
 
-  // if (authUser.accessToken) {
-  //   return <Navigate to={RouteEnum.HOME} />;
-  // }
-  //  const useRowStyles = makeStyles({
-  //   root: ({ open }) => ({
-  //     backgroundColor: "pink"
-  //   }),
-  //   tableBody: {
-  //     "& > :not(:last-child)": {
-  //       borderBottom: "25px solid red"
-  //     }
-  //   }
-  // });
-
-  // const classes = useRowStyles();
+  
 
   return (
     <div>
@@ -349,7 +341,7 @@ function Trips(props) {
                 <Typography variant="h6">{tableArray.id}</Typography>
               </div>
 
-              <div className="w-[11.11%] text-center  px-3 py-3">
+              <div className="w-[19.11%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Order ID</h6>
               </div>
               <div className="w-[11.11%] text-center  px-3 py-3">
@@ -367,15 +359,18 @@ function Trips(props) {
               <div className="w-[11.11%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Time Delay</h6>
               </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
+{/* *Put back Action */}
+
+
+              {/* <div className="w-[11.11%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Action</h6>
-              </div>
+              </div> */}
             </div>
             <div className="mt-3 background-table">
-              {rows.map((row) => (
+              {totalTrips?.map((row, idx) => (
                 <div
                   className="flex"
-                  key={row.name}
+                  key={idx}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     marginTop: 10,
@@ -383,35 +378,35 @@ function Trips(props) {
                   }}
                 >
                   <div className="w-[11.11%] border3b px-3 py-3  text-center">
-                    {row.origin}
+                    {row?.pickUpAddress}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.destination}
+                    {row?.destAddress}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.rider}
+                    {row?.rider || "-"}
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.orderId}
+                  <div className="w-[19.11%]  px-3 py-3  border3b text-center">
+                    {row?.riderId}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
                     <p className="bg-[#03732930] px-3 py-1 text-[#0C3BAA] font-semibold">
-                      {row.status}
+                      {row?.tripRequestStatus}
                     </p>
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.fee}
+                    {row?.tripAmt}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.departureDate}
+                    {row.departureDate||'-'}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.arrivalDate}
+                    {row.arrivalDate||'-'}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
                     -
                   </div>
-                  <div className="w-[15%]  px-3 py-3  border3b text-center">
+                  {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
                     <Button
                       onClick={() => {
                         handleShow(row);
@@ -419,7 +414,7 @@ function Trips(props) {
                     >
                       View Route
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

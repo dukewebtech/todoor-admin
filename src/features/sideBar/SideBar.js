@@ -33,11 +33,13 @@ import LoginHeader from "common/LoginHeader";
 import { RouteEnum } from "constants/RouteConstants";
 import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
+import useLogout from "hooks/useLogout";
 
 const drawerWidth = 240;
 
 export default function PermanentDrawerLeft() {
   const history = useNavigate();
+  const { logout } = useLogout();
 
   const [outcasts, setOutcasts] = React.useState([
     { name: "Logout", linx: RouteEnum.HOME, image: logouts },
@@ -112,11 +114,11 @@ export default function PermanentDrawerLeft() {
     // logout()
   };
 
-  const logout = (push) => {
-    localStorage.removeItem("il");
-    console.log("hi");
-    history(push);
-  };
+  // const logout = (push) => {
+  //   localStorage.clear();
+  //   console.log("hi");
+  //   history(push);
+  // };
 
   // const pat =
 

@@ -53,7 +53,7 @@ function ManageCompanies(props) {
   const [show, setShow] = useState(false);
   const [companyRiders, setCompanyRiders] = useState([]);
   const [companyEarns, setCompanyEarns] = useState([]);
-  const [companyId, setCompanyId] = useState();
+  const [companyNames, setCompanyName] = useState('');
   const handleShow = (event) => {
     setShow(!show);
     // console.log("john");
@@ -79,7 +79,7 @@ function ManageCompanies(props) {
     { label: "Oredo", year: 1972 },
   ];
 
-  const tabloid = companyRiders.map((e) => ({
+  const tabloid = companyRiders?.map((e) => ({
     image: gigLogo,
     name: e?.fname,
     company: e?.companyName,
@@ -166,8 +166,8 @@ function ManageCompanies(props) {
       //  body: { ...payload },
       auth: true,
     });
-    console.log(res.data.data);
-    return (res.data.data.length);
+    console.log(res?.data?.data);
+    return (res?.data?.data?.length);
   };
 
   const companyEarnings = async (companyId) => {
@@ -176,8 +176,8 @@ function ManageCompanies(props) {
       //  body: { ...payload },
       auth: true,
     });
-    console.log(res.data.data);
-    setCompanyEarns(res.data.data);
+    setCompanyEarns(res?.data?.data[0]?.total_revenue);
+    // setCompanyEarns(res.data.data);
   };
 
  
@@ -191,8 +191,10 @@ function ManageCompanies(props) {
             {totalCompanies?.map((e) => (
               <div
                 onClick={() => {
-                  ridersUnderCompany(e._id);
-                  companyEarnings(e._id);
+                  ridersUnderCompany(e?._id);
+                  companyEarnings(e?._id);
+    setCompanyName(e?.fname);
+
                 }}
                 className="w-[32%] mt-3"
               >
@@ -200,7 +202,6 @@ function ManageCompanies(props) {
               </div>
             ))}
           </div>
-         
         </div>
       )}
 
@@ -230,7 +231,7 @@ function ManageCompanies(props) {
           >
             <img src={gigLogo} />
             <Typography variant="h5" className="font-bold ml-4 ">
-              GIG LOGISTICS
+              {companyNames}
             </Typography>
           </div>
           <div className="flex ">
@@ -240,15 +241,15 @@ function ManageCompanies(props) {
                 small={true}
                 bigspace={true}
                 name="Riders"
-                count={companyRiders.length}
+                count={companyRiders?.length}
               />
-           
+
               <NewWallCards
                 dashboard={true}
                 small={true}
                 cutborder={true}
                 name="Earnings"
-                count="30,000"
+                count={companyEarns}
               />
             </div>
           </div>
@@ -263,7 +264,6 @@ function ManageCompanies(props) {
 
             <div className="flex justify-between items-end">
               <Autocomplete
-               
                 className="mr-3"
                 id="combo-box-demo"
                 options={top100Films}
@@ -279,7 +279,7 @@ function ManageCompanies(props) {
             </div>
           </div>
 
-          {tabloid.map((e) => (
+          {tabloid?.map((e) => (
             <ManageCompaniesTable tableArray={e} />
           ))}
         </div>

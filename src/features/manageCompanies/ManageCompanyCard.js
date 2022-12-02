@@ -16,6 +16,7 @@ import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
 import background from "images/background.png";
 import gigLogo from "images/Ellipse 56.png";
+import moment from 'moment'
 import axiosConn from "apis/ApiClient";
 import axios from "axios";
   import { post, get, put } from "services/fetch";
@@ -136,7 +137,8 @@ handleShow, companyId}) {
                 </div>
                 <div>
                   <Typography className="ml-14 mt-1 font-bold text-sm">
-                    33 Riders
+                    {/* {33 Riders} */}
+                    XXXXXXXXXX
                     {/* {ridersUnderCompanyR()} */}
                     {/* {ridersUnderCompany(companyDetails?._id)} */}
                   </Typography>
@@ -145,9 +147,10 @@ handleShow, companyId}) {
               <div className="mt-4 " style={{ backGroundColor: "#EBEBEB" }}>
                 <div>
                   <Typography className="text-sm font-bold text-cardhead-blue">
-                    NGN 20,000 Earned
+                    {/* NGN 20,000 Earned */}
+                    XXXXXXXXXX
                   </Typography>
-                  <p className="medium-size cardhead">Since Aug 29, 2022</p>
+                  <p className="medium-size cardhead">{moment(companyDetails?.created_at).format('ll')}</p>
                 </div>
 
                 <p className="text-lg cardhead absolute bottom-3 opacity-50 right-2">

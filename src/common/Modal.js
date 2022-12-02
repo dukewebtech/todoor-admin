@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { RiErrorWarningLine } from "react-icons/ri";
-import { post, get, put } from "services/fetch";
+import { post, get, put, del } from "services/fetch";
 
 
 const style = {
@@ -27,7 +27,7 @@ export default function BasicModal({closeModal, openModal, suspend,companyId}) {
   console.log(companyId)
 
   const deleteRider = async () => {
-    const res = await get({
+    const res = await del({
       endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
       //  body: { ...payload },
       auth: true,

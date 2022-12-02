@@ -120,8 +120,8 @@ function Signup(props) {
     console.log(text);
     console.log(totalRiders);
     // let kk =
-    let pp = totalRiders.filter(
-      (e) => e.fname?.toLowerCase().includes(text?.toLowerCase())
+    let pp = totalRiders.filter((e) =>
+      e.fname?.toLowerCase().includes(text?.toLowerCase())
     );
     // let kk = totalRiders.map((e) => e.fname);
     setFiltered(pp);
@@ -206,17 +206,15 @@ function Signup(props) {
         />
         <Button className="p-3 w-1/3 ml-4">Search</Button>
       </div>
-      {filtered && filtered.length > 0 && 
+      {filtered && filtered.length > 0 && (
         <div className="flex gap-6 items-center mt-8 flex-wrap">
           {filtered.map((e) => (
             <div className="mr-4  w-3/12">
               <CompanyRiderCard filtered={e} />
             </div>
           ))}
-
-         
         </div>
-      }
+      )}
     </div>
   );
 }

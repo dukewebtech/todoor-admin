@@ -12,7 +12,7 @@ SoftworkHttp.interceptors.request.use((config) => {
         store.getState().global.authUser || {};
 
     if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+        config.headers.Authorization = ` ${accessToken}`;
         // cookies.set('token',accessToken)
         localStorage.setItem("token", accessToken);
 

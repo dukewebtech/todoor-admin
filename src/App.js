@@ -10,6 +10,8 @@ import useAuthUser from "hooks/useAuthUser";
 function App() {
   const authUser = useAuthUser();
 
+  console.log(!!authUser?.accessToken);
+
   return (
     <AppThemeProvider>
       <SnackbarProvider
@@ -29,12 +31,7 @@ function App() {
         )}
       >
         <Suspense>
-          {/* { */}
-            {/* // !!authUser?.accessToken &&
-            // localStorage.getItem('authUser') == 'true' && */}
-            <AppProtected /> 
-            <AppPublic />
-          {/* } */}
+          {!!authUser?.accessToken ? <AppProtected /> : <AppPublic />}
         </Suspense>
       </SnackbarProvider>
     </AppThemeProvider>
