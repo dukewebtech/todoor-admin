@@ -129,26 +129,45 @@ function ManageCompaniesTable(props) {
           </div>
           <div className="w-full  p-3 ">
             <p className="medium-size">Name</p>
-            <Typography variant="h6">{props?.tableArray?.name}</Typography>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.name}
+            </Typography>
           </div>
           <div className="w-full  p-3 ">
             <p className="medium-size">company</p>
-            <Typography variant="h6">{props?.tableArray?.company}</Typography>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.company}
+            </Typography>
           </div>
           <div className="w-full  p-3 ">
             <p className="medium-size">Email</p>
-            <Typography variant="h6">{props?.tableArray?.id}</Typography>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.id}
+            </Typography>
           </div>
           <div className="w-full  p-3 ">
             <p className="medium-size">Reg. Date</p>
-            <Typography variant="h6">{props?.tableArray?.ratings}</Typography>
-
-            {/* <Rating
-              name="read-only"
-              value={props?.tableArray?.ratings}
-              readOnly
-            /> */}
-            {/* <Typography variant='h6'>{e.ratings}</Typography> */}
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.ratings}
+            </Typography>
+          </div>
+          <div className="w-full  p-3 ">
+            <p className="medium-size">Mobile No.</p>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.phoneNo}
+            </Typography>
+          </div>
+          <div className="w-full  p-3 ">
+            <p className="medium-size">Trips Completed</p>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.tripsCompleted}
+            </Typography>
+          </div>
+          <div className="w-full  p-3 ">
+            <p className="medium-size">status</p>
+            <Typography variant="" class="text-sm">
+              {props?.tableArray?.status}
+            </Typography>
           </div>
           <div className="w-1/2   p-3">
             <p className="medium-size">

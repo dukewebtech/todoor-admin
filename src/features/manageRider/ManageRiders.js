@@ -82,7 +82,10 @@ function ManageRiders(props) {
       : "Self Registered",
     id: e?.email,
     // ratings: e.userRating && e.userRating !== 0 ? e.userRating : "4",
-    ratings: moment(e?.created_at).format('ll'),
+    ratings: moment(e?.created_at).format("ll"),
+    tripsCompleted: "-",
+    phoneNo: e?.phoneNo,
+    status: e?.currTripState,
   }));
 
   console.log(allRiders);

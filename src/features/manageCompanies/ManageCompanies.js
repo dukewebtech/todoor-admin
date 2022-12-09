@@ -47,6 +47,7 @@ import ManageCompaniesTable from "./ManageCompaniesTable";
 import NewWallCards from "common/NewWallCards";
 import ToDoorSearch from "common/ToDoorSearch";
 import { useDispatch } from "react-redux";
+import moment from "moment";
 
 function ManageCompanies(props) {
   // const dispatch = useDispatch
@@ -83,8 +84,11 @@ function ManageCompanies(props) {
     image: gigLogo,
     name: e?.fname,
     company: e?.companyName,
-    id: e?._id,
-    ratings: e?.userRating,
+    id: e?.email,
+    ratings: moment(e.created_at).format("ll"),
+    tripsCompleted: '-',
+    phoneNo: e?.phoneNo,
+    status: e?.currTripState,
   }));
 
   const tableArray = [
