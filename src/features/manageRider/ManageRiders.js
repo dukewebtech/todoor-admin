@@ -48,26 +48,44 @@ import {
 } from "react-icons/ri";
 import { MdRefresh } from "react-icons/md";
 import ToDoorSearch from "common/ToDoorSearch";
+import moment from "moment";
 function ManageRiders(props) {
- 
   const history = useNavigate();
 
-   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
-   const totalRiders = getAllRIderQueryResult?.data?.data;
+  const getAllCompanyQueryResult = UserApi.useGetAllQuery({
+    userType: "company",
+  });
+  const totalCompanies = getAllCompanyQueryResult?.data?.data;
+
+  const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
+  const totalRiders = getAllRIderQueryResult?.data?.data;
 
   const redirect = () => {
     history("/complete-signUp");
   };
 
+  const getCompanyName = (id) => {
+    if(totalCompanies && totalRiders && id){
+ let compName = totalCompanies.find((e) => e._id == id);
+ console.log(compName?.fname);
+    return compName
+
+    }
+   
+  };
+
   const allRiders = totalRiders?.map((e) => ({
     image: e?.profileUrl,
     name: `${e?.fname}`,
-    company: "GIG Logistics",
-    id: e._id,
-    ratings: e.userRating && e.userRating !== 0 ? e.userRating : "4",
+    company: e?.companyId
+      ? getCompanyName(e?.companyId)?.fname
+      : "Self Registered",
+    id: e?.email,
+    // ratings: e.userRating && e.userRating !== 0 ? e.userRating : "4",
+    ratings: moment(e?.created_at).format('ll'),
   }));
 
-  console.log(allRiders)
+  console.log(allRiders);
 
   const tableArray = [
     {
@@ -77,8 +95,6 @@ function ManageRiders(props) {
       Id: "2234456",
       userRating: "4",
     },
-
-    
 
     // {
     //   image: gigLogo,
@@ -185,8 +201,8 @@ function ManageRiders(props) {
       <Typography variant="h5" className="font-bold mt-8 text-primary-main">
         All Riders
       </Typography>
-      {allRiders?.map((e) => (
-        <ManageCompaniesTable tableArray={e} />
+      {allRiders?.map((e,idx) => (
+        <ManageCompaniesTable tableArray={e} key={idx}/>
       ))}
 
       {/* <div className="flex justify-between my-7">

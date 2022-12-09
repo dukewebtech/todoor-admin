@@ -15,7 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
 // import ManageCompanyCard from 'common/ManageCompanyCard'
-import ManageTripsTable from "./ManageTripsTable";
+import ManageTripsTable from "features/trips/ManageTripsTable";
 // import { RouteEnum } from "constants/RouteConstants";
 // import ReactDOM from 'react-dom';
 // import trustedBy1 from './images/Vector.png'
@@ -39,7 +39,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WallCards from "common/WallCards";
-import TripsMap from "./TripsMap";
+// import TripsMap from "./TripsMap";
 import { selectRowsFn } from "@tanstack/react-table";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
@@ -76,7 +76,7 @@ function Trips(props) {
   //  setTrips(totalTrips)
   useEffect(() => {
     // if (trips.length > 0) setTripz(trips);
-     setTripz(totalTrips);
+    setTripz(totalTrips);
   }, [totalTrips]);
 
   function createData(
@@ -156,20 +156,18 @@ function Trips(props) {
 
   const tableArray = [
     {
-      image: gigLogo,
-      name: "Nickky Samuel jonas  ",
-      company: "GIG Logistics",
-      Id: "2234456",
-      ratings: "4",
+      pickUpAddress: 12121212,
+      destAddress: `
+      97 Osolua street
+off omokaro street `,
+      rider: `97, Osolua street
+off omokaro street`,
+      riderId: "NGN 20,098",
+      tripRequestStatus: "2/12/2022",
+      tripAmt: "Success",
     },
 
-    {
-      image: gigLogo,
-      name: "John jimmy Samuel  ",
-      company: "GIG Logistics",
-      Id: "2234456",
-      ratings: "4",
-    },
+    
   ];
 
   const authUser = useAuthUser();
@@ -219,45 +217,15 @@ function Trips(props) {
 
   return (
     <div>
-      <ToDoorSearch />
       {!show && (
         <div>
           <div
             className="flex justify-between mb-8 items-center"
-            style={{ backGroundColor: "#1E1E1E" }}
+            style={{ backgroundColor: "white" }}
           >
             {/* <img src = {gigLogo}/> */}
 
-            <div className="flex justify-between w-2/5">
-              <Typography variant="h5" className="font-bold text-blue-800 ">
-                Trips
-              </Typography>
-              <Button
-                onClick={() => filterTrips("enRoute")}
-                color="primary"
-                className="ml-4 px-16"
-              >
-                Confirmed
-              </Button>
-              <Badge badgeContent={4} color="error">
-                <Button
-                  onClick={() => filterTrips("request")}
-                  className="text-neutral-800 ml-3 px-12"
-                  color="buttonhead"
-                >
-                  Pending
-                </Button>
-              </Badge>{" "}
-              <Button
-                onClick={() => filterTrips("rejected")}
-                color="buttonhead"
-                className="text-neutral-800 ml-5 px-16"
-              >
-                Declined
-              </Button>
-            </div>
-
-            <div>
+            {/* <div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <div className="flex-between">
                   <DatePicker
@@ -274,117 +242,48 @@ function Trips(props) {
                   />
                 </div>
               </LocalizationProvider>
-            </div>
+            </div> */}
           </div>
 
           <div
-            sx={{ minWidth: 650, backgroundColor: "#EBEBEB" }}
+            sx={{ minWidth: 650, backgroundColor: "white" }}
             aria-label="simple table"
           >
-            {/* <TableHead
-              sx={{
-                padding: "100px",
-                backgroundColor: "#EBEBEB",
-                border: "2px solid red",
-              }}
-              className="mb-4"
-            >
-              <TableRow sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
-                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
-                  Origin
-                </TableCell>
-                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
-                  Destination
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Rider
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Order ID&nbsp;(g)
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Status&nbsp;(g)
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Fee&nbsp;(g)
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Departure Date&nbsp;(g)
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Arrival Date&nbsp;(g)
-                </TableCell>
-                <TableCell
-                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
-                  align="right"
-                >
-                  Action&nbsp;(g)
-                </TableCell>
-              </TableRow>
-            </TableHead> */}
-
             <div
               //   onClick={openBelow}
               style={{ border: "1px solid #DADADA" }}
-              className=" cursor-pointer mt-2 flex border2 background-table min-h-[50%]"
+              className=" cursor-pointer mt-2 flex border2  min-h-[50%]"
             >
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Origin</h6>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Booking Id</h6>
                 <Typography variant="h6"></Typography>
               </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Destination</h6>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Picked UP</h6>
                 <Typography variant="h6">{tableArray.company}</Typography>
-              </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Rider</h6>
-                <Typography variant="h6">{tableArray.id}</Typography>
               </div>
 
               <div className="w-[19.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Order ID</h6>
+                <h6 className="font-bold text-[#454647]">Dropped</h6>
               </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Price</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Date</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Status</h6>
               </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Fee</h6>
-              </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Departure Date</h6>
-              </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Arrival Date</h6>
-              </div>
-              <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Time Delay</h6>
-              </div>
+
               {/* *Put back Action */}
 
-              {/* <div className="w-[11.11%] text-center  px-3 py-3">
+              {/* <div className="w-[19%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Action</h6>
               </div> */}
             </div>
-            <div className="mt-3 background-table">
-              {tripz?.map((row, idx) => (
+            <div className="mt-3 ">
+              {tableArray?.map((row, idx) => (
                 <div
                   className="flex"
                   key={idx}
@@ -394,35 +293,27 @@ function Trips(props) {
                     backgroundColor: "",
                   }}
                 >
-                  <div className="w-[11.11%] border3b px-3 py-3  text-center">
+                  <div className="w-[19%] border3b px-3 py-3  text-center">
                     {row?.pickUpAddress}
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
                     {row?.destAddress}
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
                     {row?.rider || "-"}
                   </div>
                   <div className="w-[19.11%]  px-3 py-3  border3b text-center">
                     {row?.riderId}
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    <p className="bg-[#03732930] px-3 py-1 text-[#0C3BAA] font-semibold">
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
                       {row?.tripRequestStatus}
                     </p>
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row?.tripAmt}
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <Button>{row?.tripAmt}</Button>
                   </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.departureDate || "-"}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.arrivalDate || "-"}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    -
-                  </div>
+
                   {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
                     <Button
                       onClick={() => {
@@ -561,9 +452,9 @@ function Trips(props) {
           </div>
         </div>
       )}
-      <div className="w-full flex items-center justify-center">
+      {/* <div className="w-full flex items-center justify-center">
         <TripsMap route={route} width={show} />
-      </div>
+      </div> */}
     </div>
   );
 }

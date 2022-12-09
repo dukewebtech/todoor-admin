@@ -9,7 +9,7 @@ import PasswordTextField from "common/PasswordTextField";
 import { getTextFieldFormikProps } from "utils/FormikUtils";
 import useAuthUser from "hooks/useAuthUser";
 import CompanyRiderCard from "common/CompanyRiderCard";
-
+import DashboardTable from './DashboardTable'
 import { Navigate } from "react-router-dom";
 import { RouteEnum } from "constants/RouteConstants";
 import LoginHeader from "common/LoginHeader";
@@ -183,38 +183,7 @@ function Signup(props) {
           />
         </div>
       </div>
-      <Typography variant="h5" className="font-bold mt-8 text-blue-800">
-        Verify Riders
-      </Typography>
-      <Divider className="my-3" />
-      <div className="flex items-center w-2/3 mt-4">
-        <TextField
-          onChange={(e) => {
-            filterRiders(e.target.value);
-            // setshow(e.target.value)
-          }}
-          // style={{ backgroundColor: "#EBEBEB", border: "none" }}
-          className="w-full bg-[#EBEBEB]"
-          placeholder="Search with Email address, Phone number, Name "
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdOutlineSearch />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Button className="p-3 w-1/3 ml-4">Search</Button>
-      </div>
-      {filtered && filtered.length > 0 && (
-        <div className="flex gap-6 items-center mt-8 flex-wrap">
-          {filtered.map((e) => (
-            <div className="mr-4  w-3/12">
-              <CompanyRiderCard filtered={e} />
-            </div>
-          ))}
-        </div>
-      )}
+    <div><DashboardTable/></div>
     </div>
   );
 }

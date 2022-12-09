@@ -57,6 +57,12 @@ function ManageCompaniesTable(props) {
   //   setAge(event.target.value);
   //   console.log(event)
   // };
+
+  //  const getCompanyName = (id) => {
+  //    let compName = totalCompanies.filter((e) => e._id == id);
+  //    console.log(compName);
+  //    return compName;
+  //  };
   const history = useNavigate();
   console.log(props)
 
@@ -116,7 +122,10 @@ function ManageCompaniesTable(props) {
           className=" cursor-pointer mt-2 flex border2 background-table min-h-[50%]"
         >
           <div className="w-1/2  p-3 ">
-            <img src={props?.tableArray?.image} className="rounded-full h-16 w-16" />
+            <img
+              src={props?.tableArray?.image}
+              className="rounded-full h-16 w-16"
+            />
           </div>
           <div className="w-full  p-3 ">
             <p className="medium-size">Name</p>
@@ -127,16 +136,18 @@ function ManageCompaniesTable(props) {
             <Typography variant="h6">{props?.tableArray?.company}</Typography>
           </div>
           <div className="w-full  p-3 ">
-            <p className="medium-size">ID Number</p>
+            <p className="medium-size">Email</p>
             <Typography variant="h6">{props?.tableArray?.id}</Typography>
           </div>
           <div className="w-full  p-3 ">
-            <p className="medium-size">Ratings</p>
-            <Rating
+            <p className="medium-size">Reg. Date</p>
+            <Typography variant="h6">{props?.tableArray?.ratings}</Typography>
+
+            {/* <Rating
               name="read-only"
               value={props?.tableArray?.ratings}
               readOnly
-            />
+            /> */}
             {/* <Typography variant='h6'>{e.ratings}</Typography> */}
           </div>
           <div className="w-1/2   p-3">

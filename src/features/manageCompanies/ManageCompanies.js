@@ -186,15 +186,14 @@ function ManageCompanies(props) {
     <div>
       <ToDoorSearch />
       {!show && (
-        <div>
-          <div class="flex flex-wrap gap-6">
+        <div className="">
+          <div class="flex flex-wrap gap-4">
             {totalCompanies?.map((e) => (
               <div
                 onClick={() => {
                   ridersUnderCompany(e?._id);
                   companyEarnings(e?._id);
-    setCompanyName(e?.fname);
-
+                  setCompanyName(e?.fname);
                 }}
                 className="w-[32%] mt-3"
               >
@@ -253,7 +252,7 @@ function ManageCompanies(props) {
               />
             </div>
           </div>
-          <div className="flex justify-between  items-end">
+          <div className="flex  justify-between  items-end">
             <Typography
               variant="h5"
               className="font-bold mt-8 text-primary-main"

@@ -52,6 +52,7 @@ import ToDoorSearch from "common/ToDoorSearch";
 // import { makeStyles } from "@material-ui/core/styles";
 // import Paper from "@material-ui/core/Paper";
 // import { makeStyles } from '@mui/styles';
+import io from "socket.io-client";
 
 function Trips(props) {
   const [map, setMap] = useState(/** @type google.maps.map*/ (null));
@@ -60,6 +61,8 @@ function Trips(props) {
   const [directionResponse, setDirectionResponse] = useState(
     /** @type google.maps.map*/ (null)
   );
+
+
   const [age, setAge] = useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -70,6 +73,18 @@ function Trips(props) {
   const redirect = () => {
     history("/complete-signUp");
   };
+
+  //  const socket = io.connect("http://todoorapp.com");
+
+   const toEmit = () => {
+     let payload = {
+       user: {
+         _id: useAuthUser._id,
+       },
+     };
+
+    //  socket.emit("adminMapSocket", payload);
+   };
 
   function createData(
     destination,
@@ -143,6 +158,7 @@ function Trips(props) {
         </Autocomplete> */}
       <div className="flex justify-between items-center">
         <div className="mb-4">
+          {/* <Button onClick={toEmit}>Emit</Button> */}
           <Button onClick={() => map.panTo(center)} className=" ml-3 px-7 py-2">
             Heat Map
           </Button>

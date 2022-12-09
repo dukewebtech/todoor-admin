@@ -94,7 +94,7 @@ handleShow, companyId}) {
     <div className="">
       <Card
         className=" text-black text-center relative"
-        sx={{ minWidth: 255, minHeight: 120, backgroundColor: "#EBEBEB" }}
+        sx={{width:300, minHeight: 120, backgroundColor: "#EBEBEB" }}
       >
         <CardContent className="">
           <div
