@@ -189,6 +189,12 @@ function Trips(props) {
     
 //   ];
 
+  function numberWithCommas(x) {
+    // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //  formState.target_amount=cleanupNumber(serPrice.value)
+    return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   const authUser = useAuthUser();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -322,7 +328,7 @@ function Trips(props) {
                     {row?.rider || "-"}
                   </div>
                   <div className="w-[19.11%]  px-3 py-3  border3b text-center">
-                    {row?.riderId}
+                    {numberWithCommas(row?.riderId)}
                   </div>
                   <div className="w-[19%]  px-3 py-3  border3b text-center">
                     <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
@@ -330,7 +336,7 @@ function Trips(props) {
                     </p>
                   </div>
                   <div className="w-[19%]  px-3 py-3  border3b text-center">
-                    <Button>{row?.tripAmt}</Button>
+                    <Button>Successful</Button>
                   </div>
 
                   {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
