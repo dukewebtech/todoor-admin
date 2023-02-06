@@ -52,6 +52,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import ToDoorSearch from "common/ToDoorSearch";
+import moment from "moment";
 
 function Trips(props) {
   const [age, setAge] = React.useState("");
@@ -154,21 +155,39 @@ function Trips(props) {
     // createData('Gingerbread', 356, 16.0, 49, 3.9),
   ];
 
-  const tableArray = [
-    {
-      pickUpAddress: 12121212,
-      destAddress: `
-      97 Osolua street
-off omokaro street `,
-      rider: `97, Osolua street
-off omokaro street`,
-      riderId: "NGN 20,098",
-      tripRequestStatus: "2/12/2022",
-      tripAmt: "Success",
-    },
+
+
+  const tableArray = totalTrips?.slice(0,7)?.map(function(e, idx) {
+  return {
+    pickUpAddress: "-",
+    destAddress: e?.pickUpAddress,
+    rider: e?.destAddress,
+    riderId: e.tripAmt,
+    tripRequestStatus: moment(e?.requestTime)?.format("ll"),
+    tripAmt: e?.tripRequestStatus,
+  }
+  }
+    
+   
+  )
+
+  
+  
+//   [
+//     {
+//       pickUpAddress: 12121212,
+//       destAddress: `
+//       97 Osolua street
+// off omokaro street `,
+//       rider: `97, Osolua street
+// off omokaro street`,
+//       riderId: "NGN 20,098",
+//       tripRequestStatus: "2/12/2022",
+//       tripAmt: "Success",
+//     },
 
     
-  ];
+//   ];
 
   const authUser = useAuthUser();
 
@@ -260,7 +279,7 @@ off omokaro street`,
               </div>
               <div className="w-[19%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Picked UP</h6>
-                <Typography variant="h6">{tableArray.company}</Typography>
+                <Typography variant="h6">{tableArray?.company}</Typography>
               </div>
 
               <div className="w-[19.11%] text-center  px-3 py-3">

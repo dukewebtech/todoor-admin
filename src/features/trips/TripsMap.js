@@ -98,9 +98,9 @@ function TripsMap({ route, width }) {
   }, [route]);
 
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    // id: "google-map-script",
     googleMapsApiKey: "AIzaSyAssvIlc0TbayfgN6C3rfGtlCXQckeystQ",
-    libraries: ["places"],
+    // libraries: ["places"],
   });
   //   const {isLoaded} = useJsApiLoader({
   //     googleMapsApiKey:'AIzaSyB6dttqGcdoqUQYT4rt4ZEd9_UOwP4GoMc',

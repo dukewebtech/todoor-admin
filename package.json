@@ -30,6 +30,7 @@
     "socket.io-client": "^4.5.4",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34",
     "yup": "^0.32.11"
   },
   "scripts": {

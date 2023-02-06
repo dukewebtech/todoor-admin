@@ -40,6 +40,7 @@ import {
   Select,
   TextField,
   Typography,
+  Avatar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -94,71 +95,34 @@ handleShow, companyId}) {
     <div className="">
       <Card
         className=" text-black text-center relative"
-        sx={{width:300, minHeight: 120, backgroundColor: "#EBEBEB" }}
+        sx={{ width: 300, minHeight: 120, backgroundColor: "#EBEBEB" }}
       >
         <CardContent className="">
           <div
             onClick={() => {
               handleShow();
             }}
-            className="flex pb-2  cursor-pointer"
+            className="flex pb-2 items-start  cursor-pointer"
             style={{ backGroundColor: "#EBEBEB" }}
           >
-            <img src={gigLogo} />
+            <Avatar sx={{ width: 70, height: 70 }} src={companyDetails?.profileUrl} />
             <div
               className="ml-2 text-left"
               style={{ backGroundColor: "#EBEBEB" }}
             >
-              <Typography variant="h6">
-                {companyDetails?.fname || "GIG Logistics"}
+              <Typography className="font-bold" variant="h6">
+                {companyDetails?.fname || "-"}
               </Typography>
               <p className="medium-size cardhead">
                 {companyDetails?.companyLocation || "Apapa Lagos"}
               </p>
+              <p className="medium-size cardhead mt-1">
+                {moment(companyDetails?.created_at).format("ll")}
+              </p>
             </div>
           </div>
 
-          <Divider />
-
-          <div className="w-4/5 ">
-            <div className=" text-left pt-2">
-              <div className="">
-                <div className=" relative flex">
-                  <img
-                    className="absolute"
-                    style={{ width: "27px" }}
-                    src={gigLogo}
-                  />
-                  <img
-                    className="absolute"
-                    style={{ width: "27px", left: "20px" }}
-                    src={gigLogo}
-                  />
-                </div>
-                <div>
-                  <Typography className="ml-14 mt-1 font-bold text-sm">
-                    {/* {33 Riders} */}
-                    XXXXXXXXXX
-                    {/* {ridersUnderCompanyR()} */}
-                    {/* {ridersUnderCompany(companyDetails?._id)} */}
-                  </Typography>
-                </div>
-              </div>
-              <div className="mt-4 " style={{ backGroundColor: "#EBEBEB" }}>
-                <div>
-                  <Typography className="text-sm font-bold text-cardhead-blue">
-                    {/* NGN 20,000 Earned */}
-                    XXXXXXXXXX
-                  </Typography>
-                  <p className="medium-size cardhead">{moment(companyDetails?.created_at).format('ll')}</p>
-                </div>
-
-                <p className="text-lg cardhead absolute bottom-3 opacity-50 right-2">
-                  ...
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* <Divider /> */}
         </CardContent>
 
         {/* <Button size="small">Learn More</Button> */}

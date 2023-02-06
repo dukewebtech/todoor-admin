@@ -189,9 +189,13 @@ function ManageRiders(props) {
           </div>
           <div className="flex">
             <div className="">
-              <WallCards short={true} name="Active" count="9K" />
+              <WallCards
+                short={true}
+                name="Active"
+                count={totalRiders?.length-1}
+              />
             </div>
-            <WallCards short={true} name="Non-Active" count="1K" />
+            <WallCards short={true} name="Non-Active" count={'1'} />
           </div>
         </div>
 
@@ -204,8 +208,8 @@ function ManageRiders(props) {
       <Typography variant="h5" className="font-bold mt-8 text-primary-main">
         All Riders
       </Typography>
-      {allRiders?.map((e,idx) => (
-        <ManageCompaniesTable tableArray={e} key={idx}/>
+      {allRiders?.map((e, idx) => (
+        <ManageCompaniesTable tableArray={e} key={idx} />
       ))}
 
       {/* <div className="flex justify-between my-7">

@@ -55,6 +55,7 @@ import ToDoorSearch from "common/ToDoorSearch";
 
 function Trips(props) {
   const [age, setAge] = React.useState("");
+  const [type, setType] = React.useState("");
   const [tripz, setTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
   const [route, setRoute] = React.useState({});
@@ -210,12 +211,18 @@ function Trips(props) {
   };
 
   const filterTrips = (type) => {
-    trips = totalTrips.filter((e) => e?.tripRequestStatus == type);
+    trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
     if (trips.length > 0) setTripz(trips);
     else setTripz(totalTrips);
+    setType(type)
     //  tripz.length > 0 ? tripz : totalTrips;
     //  setTripz(trips)
   };
+  function numberWithCommas(x) {
+    // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //  formState.target_amount=cleanupNumber(serPrice.value)
+    return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   return (
     <div>
@@ -233,31 +240,45 @@ function Trips(props) {
                 Trips
               </Typography>
               <Button
-                onClick={() => filterTrips("enRoute")}
-                color="primary"
-                className="ml-4 px-16"
+                onClick={() => filterTrips("completed")}
+                color={type == "completed" ? "primary" : "buttonhead"}
+                className={"ml-4 px-16"}
               >
                 Confirmed
+              </Button>
+              <Button
+                onClick={() => filterTrips("enRoute")}
+                color={type == "enRoute" ? "primary" : "buttonhead"}
+                className="ml-4 px-16"
+              >
+                Enroute
               </Button>
               <Badge badgeContent={4} color="error">
                 <Button
                   onClick={() => filterTrips("request")}
-                  className="text-neutral-800 ml-3 px-12"
-                  color="buttonhead"
+                  className=" ml-3 px-12"
+                  color={type == "request" ? "primary" : "buttonhead"}
                 >
                   Pending
                 </Button>
               </Badge>{" "}
               <Button
                 onClick={() => filterTrips("rejected")}
-                color="buttonhead"
-                className="text-neutral-800 ml-5 px-16"
+                color={type == "rejected" ? "primary" : "buttonhead"}
+                className=" ml-5 px-16"
               >
                 Declined
               </Button>
+              <Button
+                onClick={() => filterTrips("all")}
+                color={type == "all" ? "primary" : "buttonhead"}
+                className=" ml-5 px-16"
+              >
+                All
+              </Button>
             </div>
 
-            <div>
+            {/* <div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <div className="flex-between">
                   <DatePicker
@@ -274,7 +295,7 @@ function Trips(props) {
                   />
                 </div>
               </LocalizationProvider>
-            </div>
+            </div> */}
           </div>
 
           <div
@@ -412,7 +433,7 @@ function Trips(props) {
                     </p>
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row?.tripAmt}
+                    {numberWithCommas(row?.tripAmt)}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
                     {row.departureDate || "-"}
@@ -562,7 +583,7 @@ function Trips(props) {
         </div>
       )}
       <div className="w-full flex items-center justify-center">
-        <TripsMap route={route} width={show} />
+        {/* <TripsMap route={route} width={show} /> */}
       </div>
     </div>
   );

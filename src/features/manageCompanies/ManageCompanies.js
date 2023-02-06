@@ -28,6 +28,7 @@ import trustedBy3 from "images/Rectangle 106.png";
 // import trustedBy4 from './images/trustedBy-4.png'
 import {
   Autocomplete,
+  Avatar,
   Button,
   Card,
   CardActions,
@@ -53,8 +54,10 @@ function ManageCompanies(props) {
   // const dispatch = useDispatch
   const [show, setShow] = useState(false);
   const [companyRiders, setCompanyRiders] = useState([]);
+  const [tempCompanyRiders, setTempCompanyRiders] = useState([]);
   const [companyEarns, setCompanyEarns] = useState([]);
-  const [companyNames, setCompanyName] = useState('');
+  const [companyNames, setCompanyName] = useState("");
+  const [companyImage, setCompanyImage] = useState("");
   const handleShow = (event) => {
     setShow(!show);
     // console.log("john");
@@ -80,13 +83,13 @@ function ManageCompanies(props) {
     { label: "Oredo", year: 1972 },
   ];
 
-  const tabloid = companyRiders?.map((e) => ({
-    image: gigLogo,
+  const tabloid = tempCompanyRiders?.map((e) => ({
+    image: e?.profileUrl,
     name: e?.fname,
     company: e?.companyName,
     id: e?.email,
     ratings: moment(e.created_at).format("ll"),
-    tripsCompleted: '-',
+    tripsCompleted: "-",
     phoneNo: e?.phoneNo,
     status: e?.currTripState,
   }));
@@ -162,6 +165,7 @@ function ManageCompanies(props) {
     });
     console.log(res.data.data);
     setCompanyRiders(res.data.data);
+    setTempCompanyRiders(res.data.data);
   };
 
   const ridersUnderCompanyR = async (companyId) => {
@@ -173,7 +177,11 @@ function ManageCompanies(props) {
     console.log(res?.data?.data);
     return (res?.data?.data?.length);
   };
-
+function numberWithCommas(x) {
+  // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  //  formState.target_amount=cleanupNumber(serPrice.value)
+  return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
   const companyEarnings = async (companyId) => {
     const res = await get({
       endpoint: `api/super-admin/companyTotalEarningStats?userId=${companyId}`,
@@ -183,6 +191,16 @@ function ManageCompanies(props) {
     setCompanyEarns(res?.data?.data[0]?.total_revenue);
     // setCompanyEarns(res.data.data);
   };
+
+  const filterRidersTable = (val)=>{
+    // console.log("Samson"?.includes(val));
+    // console.log(companyRiders);
+    console.log(val)
+    let temp = companyRiders?.filter((e) =>
+      e?.fname.toLowerCase()?.includes(val?.toLowerCase())
+    );
+    setTempCompanyRiders(temp)
+  }
 
  
 
@@ -198,6 +216,7 @@ function ManageCompanies(props) {
                   ridersUnderCompany(e?._id);
                   companyEarnings(e?._id);
                   setCompanyName(e?.fname);
+                  setCompanyImage(e?.profileUrl)
                 }}
                 className="w-[32%] mt-3"
               >
@@ -232,7 +251,7 @@ function ManageCompanies(props) {
             className="flex items-center"
             style={{ backGroundColor: "#1E1E1E" }}
           >
-            <img src={gigLogo} />
+            <Avatar src={companyImage} className="rounded-full" />
             <Typography variant="h5" className="font-bold ml-4 ">
               {companyNames}
             </Typography>
@@ -252,7 +271,7 @@ function ManageCompanies(props) {
                 small={true}
                 cutborder={true}
                 name="Earnings"
-                count={companyEarns}
+                count={numberWithCommas(companyEarns)}
               />
             </div>
           </div>
@@ -266,7 +285,10 @@ function ManageCompanies(props) {
             </Typography>
 
             <div className="flex justify-between items-end">
-              <Autocomplete
+              <TextField
+                onChange={(e, value) => filterRidersTable(e.target.value)}
+              />
+              {/* <Autocomplete
                 className="mr-3"
                 id="combo-box-demo"
                 options={top100Films}
@@ -278,7 +300,7 @@ function ManageCompanies(props) {
                 options={top100Films}
                 sx={{ width: 200 }}
                 renderInput={(params) => <TextField {...params} />}
-              />
+              /> */}
             </div>
           </div>
 

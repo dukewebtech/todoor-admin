@@ -56,9 +56,14 @@ function Signup(props) {
   //  const getUserStatsQueryResult = UserApi.useGetStatsQuery();
   //  console.log(getUserStatsQueryResult);
   //  const userStats = getUserStatsQueryResult?.data?.data;
+const getCompanyStatisticsQueryResult = UserApi.useGetCompanyStatisticsQuery({});
+const companyStatistics = getCompanyStatisticsQueryResult?.data;
 
+console.log(companyStatistics);
   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
   const totalRiders = getAllRIderQueryResult?.data?.data;
+
+   
 
   const getAllCompanyQueryResult = UserApi.useGetAllQuery({
     userType: "company",
@@ -83,51 +88,28 @@ function Signup(props) {
 
   const authUser = useAuthUser();
 
-  // const { enqueueSnackbar } = useSnackbar();
-  // const [loginMuation, loginMutationResult] = UserApi.useLoginMutation();
+   const getAllTripsQueryResult = UserApi.useGetAllTripsQuery({
+     //  userType: "Trips",
+   });
+   const totalTrips = getAllTripsQueryResult?.data;
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     username: "",
-  //     password: "",
-  //   },
-  //   validationSchema: yup.object({
-  //     username: yup.string().trim().required(),
-  //     password: yup.string().trim().required(),
-  //   }),
-  //   onSubmit: async (values) => {
-  //     console.log(values);
-  //     // localStorage.setItem('location', values.location)
-  //     redirect();
-
-  //     try {
-  //       const data = await loginMuation({ data: values }).unwrap();
-  //       // TODO extra login
-  //       // redirect()
-  //       enqueueSnackbar("Logged in successful", { variant: "success" });
-  //     } catch (error) {
-  //       enqueueSnackbar(error?.data?.message, "Failed to login", {
-  //         variant: "error",
-  //       });
-  //     }
-  //   },
-  // });
-
-  // if (authUser.accessToken) {
-  //   return <Navigate to={RouteEnum.HOME} />;
-  // }
   const filterRiders = (text) => {
     console.log(text);
     console.log(totalRiders);
     // let kk =
     let pp = totalRiders.filter((e) =>
-      e.fname?.toLowerCase().includes(text?.toLowerCase())
+      e.fname?.toLowerCase()
     );
     // let kk = totalRiders.map((e) => e.fname);
     setFiltered(pp);
     // console.log(kk.filter((e) => text?.toLowerCase() == e?.toLowerCase()));
     // console.log(kk);
   };
+  function numberWithCommas(x) {
+    // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //  formState.target_amount=cleanupNumber(serPrice.value)
+    return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   return (
     <div>
@@ -146,21 +128,29 @@ function Signup(props) {
             dashboard={true}
             green={true}
             name="Total Companies"
-            count={totalCompanies && totalCompanies?.length}
+            count={companyStatistics && companyStatistics?.total_company}
           />
         </div>
         <div className="mr-3">
           <WallCards
             dashboard={true}
             name="Total Raiders"
-            count={totalRiders && totalRiders?.length}
+            count={companyStatistics && companyStatistics?.total_company}
           />
         </div>
         <div className="mr-3">
-          <WallCards dashboard={true} name="Rides in progress" count="13" />
+          <WallCards
+            dashboard={true}
+            name="Rides in progress"
+            count={companyStatistics && companyStatistics?.total_riders}
+          />
         </div>
         <div className="mr-3">
-          <WallCards dashboard={true} name="Active vehicles" count="8" />
+          <WallCards
+            dashboard={true}
+            name="Active vehicles"
+            count={companyStatistics && companyStatistics?.active_bikes}
+          />
         </div>
         <div className="relative w-full">
           <div
@@ -179,11 +169,16 @@ function Signup(props) {
             dashboard={true}
             small={true}
             name="Earnings"
-            count="3,000,000"
+            count={
+              numberWithCommas(companyStatistics &&
+              companyStatistics?.total_earnings)
+            }
           />
         </div>
       </div>
-    <div><DashboardTable/></div>
+      <div>
+        <DashboardTable />
+      </div>
     </div>
   );
 }

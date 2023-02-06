@@ -133,12 +133,12 @@ function ManageCompaniesTable(props) {
               {props?.tableArray?.name}
             </Typography>
           </div>
-          <div className="w-full  p-3 ">
+          {/* <div className="w-full  p-3 ">
             <p className="medium-size">company</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.company}
             </Typography>
-          </div>
+          </div> */}
           <div className="w-full  p-3 ">
             <p className="medium-size">Email</p>
             <Typography variant="" class="text-sm">
@@ -163,12 +163,12 @@ function ManageCompaniesTable(props) {
               {props?.tableArray?.tripsCompleted}
             </Typography>
           </div>
-          <div className="w-full  p-3 ">
+          {/* <div className="w-full  p-3 ">
             <p className="medium-size">status</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.status}
             </Typography>
-          </div>
+          </div> */}
           <div className="w-1/2   p-3">
             <p className="medium-size">
               {!show ? (

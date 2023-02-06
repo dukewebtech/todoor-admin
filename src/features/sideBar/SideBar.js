@@ -87,14 +87,14 @@ export default function PermanentDrawerLeft() {
       imageboolean: false,
     },
     // {name:'Reviews', d:RouteEnum.MANAGE_COMPANIES},
-    {
-      name: "Reviews",
-      // d: "",
-      image: message,
-      color: false,
-      image2: messageW,
-      imageboolean: false,
-    },
+    // {
+    //   name: "Reviews",
+    //   // d: "",
+    //   image: message,
+    //   color: false,
+    //   image2: messageW,
+    //   imageboolean: false,
+    // },
     {
       name: "Support",
       d: RouteEnum.SUPPORT,

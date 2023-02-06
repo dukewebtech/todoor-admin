@@ -19,6 +19,17 @@ export const UserApi = SoftwrkApi.injectEndpoints({
       }),
     }),
 
+    getCompanyStatistics: builder.query({
+      query: (arg) => {
+        const { userType } = arg;
+        return {
+          url: `${BASE_URL}/super-admin/adminStatistics`,
+          method: "GET",
+          // params: { userType },
+        };
+      },
+    }),
+
     getAll: builder.query({
       query: (arg) => {
         const { userType } = arg;
