@@ -54,7 +54,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import ToDoorSearch from "common/ToDoorSearch";
 import moment from "moment";
 
-function Trips(props) {
+function Trips({riders}) {
   const [age, setAge] = React.useState("");
   const [tripz, setTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
@@ -79,6 +79,16 @@ function Trips(props) {
     // if (trips.length > 0) setTripz(trips);
     setTripz(totalTrips);
   }, [totalTrips]);
+
+
+  console.log(riders)
+
+  const getRider = (id)=>{
+    // console.log(id)
+    console.log(riders)
+    let pp = riders?.find((e) => e?._id == id);
+    return pp?.fname
+  }
 
   function createData(
     origin,
@@ -157,9 +167,9 @@ function Trips(props) {
 
 
 
-  const tableArray = totalTrips?.slice(0,7)?.map(function(e, idx) {
+  const tableArray = totalTrips?.slice(0,7)?.reverse()?.map(function(e, idx) {
   return {
-    pickUpAddress: "-",
+    pickUpAddress: getRider(e?.riderId),
     destAddress: e?.pickUpAddress,
     rider: e?.destAddress,
     riderId: e.tripAmt,
@@ -280,7 +290,7 @@ function Trips(props) {
               className=" cursor-pointer mt-2 flex border2  min-h-[50%]"
             >
               <div className="w-[19%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Booking Id</h6>
+                <h6 className="font-bold text-[#454647]">Rider</h6>
                 <Typography variant="h6"></Typography>
               </div>
               <div className="w-[19%] text-center  px-3 py-3">

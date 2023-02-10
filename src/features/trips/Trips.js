@@ -69,6 +69,9 @@ function Trips(props) {
     history("/complete-signUp");
   };
 
+   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
+   const totalRiders = getAllRIderQueryResult?.data?.data;
+
   const getAllCompanyQueryResult = UserApi.useGetAllTripsQuery({
     //  userType: "company",
   });
@@ -210,10 +213,17 @@ function Trips(props) {
     setRoute(e);
   };
 
+  const getRider = (id) => {
+    // console.log(id)
+    // console.log(riders);
+    let pp = totalRiders?.find((e) => e?._id == id);
+    return pp?.fname;
+  };
+
   const filterTrips = (type) => {
     trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
     if (trips.length > 0) setTripz(trips);
-    else setTripz(totalTrips);
+    else setTripz([]);
     setType(type)
     //  tripz.length > 0 ? tripz : totalTrips;
     //  setTripz(trips)
@@ -404,7 +414,7 @@ function Trips(props) {
                 <h6 className="font-bold text-[#454647]">Action</h6>
               </div> */}
             </div>
-            <div className="mt-3 background-table">
+           {tripz?.length>0? <div className="mt-3 background-table">
               {tripz?.map((row, idx) => (
                 <div
                   className="flex"
@@ -422,7 +432,7 @@ function Trips(props) {
                     {row?.destAddress}
                   </div>
                   <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row?.rider || "-"}
+                    {getRider(row?.riderId) || "-"}
                   </div>
                   <div className="w-[19.11%]  px-3 py-3  border3b text-center">
                     {row?.riderId}
@@ -455,7 +465,7 @@ function Trips(props) {
                   </div> */}
                 </div>
               ))}
-            </div>
+            </div>:'No data'}
           </div>
 
           {/* <Table

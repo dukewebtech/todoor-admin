@@ -134,7 +134,7 @@ console.log(companyStatistics);
         <div className="mr-3">
           <WallCards
             dashboard={true}
-            name="Total Raiders"
+            name="Total Riders"
             count={companyStatistics && companyStatistics?.total_company}
           />
         </div>
@@ -148,7 +148,7 @@ console.log(companyStatistics);
         <div className="mr-3">
           <WallCards
             dashboard={true}
-            name="Active vehicles"
+            name="Users"
             count={companyStatistics && companyStatistics?.active_bikes}
           />
         </div>
@@ -158,26 +158,25 @@ console.log(companyStatistics);
             style={{ top: "-20px" }}
           >
             <p className="font-bold flextext-xs self-end">Today</p>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <span className="text-xs mr-1 opacity-50">
                 <MdRefresh />
               </span>
               <span className="text-xs opacity-50">Refresh</span>
-            </div>
+            </div> */}
           </div>
           <WallCards
             dashboard={true}
             small={true}
             name="Earnings"
-            count={
-              numberWithCommas(companyStatistics &&
-              companyStatistics?.total_earnings)
-            }
+            count={numberWithCommas(
+              companyStatistics && companyStatistics?.total_earnings
+            )}
           />
         </div>
       </div>
       <div>
-        <DashboardTable />
+        <DashboardTable riders={totalRiders} />
       </div>
     </div>
   );
