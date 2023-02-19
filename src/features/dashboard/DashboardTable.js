@@ -54,7 +54,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import ToDoorSearch from "common/ToDoorSearch";
 import moment from "moment";
 
-function Trips({riders}) {
+function Trips({ riders }) {
   const [age, setAge] = React.useState("");
   const [tripz, setTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
@@ -80,15 +80,14 @@ function Trips({riders}) {
     setTripz(totalTrips);
   }, [totalTrips]);
 
+  console.log(riders);
 
-  console.log(riders)
-
-  const getRider = (id)=>{
+  const getRider = (id) => {
     // console.log(id)
-    console.log(riders)
+    console.log(riders);
     let pp = riders?.find((e) => e?._id == id);
-    return pp?.fname
-  }
+    return pp?.fname;
+  };
 
   function createData(
     origin,
@@ -165,39 +164,34 @@ function Trips({riders}) {
     // createData('Gingerbread', 356, 16.0, 49, 3.9),
   ];
 
+  const tableArray = totalTrips
+    ?.slice(0, 7)
+    ?.reverse()
+    ?.map(function (e, idx) {
+      return {
+        pickUpAddress: getRider(e?.riderId),
+        destAddress: e?.pickUpAddress,
+        rider: e?.destAddress,
+        riderId: e.tripAmt,
+        tripRequestStatus: moment(e?.requestTime)?.format("ll"),
+        tripAmt: e?.tripRequestStatus,
+      };
+    });
 
+  //   [
+  //     {
+  //       pickUpAddress: 12121212,
+  //       destAddress: `
+  //       97 Osolua street
+  // off omokaro street `,
+  //       rider: `97, Osolua street
+  // off omokaro street`,
+  //       riderId: "NGN 20,098",
+  //       tripRequestStatus: "2/12/2022",
+  //       tripAmt: "Success",
+  //     },
 
-  const tableArray = totalTrips?.slice(0,7)?.reverse()?.map(function(e, idx) {
-  return {
-    pickUpAddress: getRider(e?.riderId),
-    destAddress: e?.pickUpAddress,
-    rider: e?.destAddress,
-    riderId: e.tripAmt,
-    tripRequestStatus: moment(e?.requestTime)?.format("ll"),
-    tripAmt: e?.tripRequestStatus,
-  }
-  }
-    
-   
-  )
-
-  
-  
-//   [
-//     {
-//       pickUpAddress: 12121212,
-//       destAddress: `
-//       97 Osolua street
-// off omokaro street `,
-//       rider: `97, Osolua street
-// off omokaro street`,
-//       riderId: "NGN 20,098",
-//       tripRequestStatus: "2/12/2022",
-//       tripAmt: "Success",
-//     },
-
-    
-//   ];
+  //   ];
 
   function numberWithCommas(x) {
     // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -338,7 +332,7 @@ function Trips({riders}) {
                     {row?.rider || "-"}
                   </div>
                   <div className="w-[19.11%]  px-3 py-3  border3b text-center">
-                    {numberWithCommas(row?.riderId)}
+                    ₦ {numberWithCommas(row?.riderId)}
                   </div>
                   <div className="w-[19%]  px-3 py-3  border3b text-center">
                     <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">

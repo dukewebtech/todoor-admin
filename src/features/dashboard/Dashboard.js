@@ -135,14 +135,14 @@ console.log(companyStatistics);
           <WallCards
             dashboard={true}
             name="Total Riders"
-            count={companyStatistics && companyStatistics?.total_company}
+            count={companyStatistics && companyStatistics?.total_riders}
           />
         </div>
         <div className="mr-3">
           <WallCards
             dashboard={true}
             name="Rides in progress"
-            count={companyStatistics && companyStatistics?.total_riders}
+            count={companyStatistics && companyStatistics?.rider_in_progress}
           />
         </div>
         <div className="mr-3">

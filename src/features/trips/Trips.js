@@ -52,10 +52,11 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import ToDoorSearch from "common/ToDoorSearch";
+import moment from "moment";
 
 function Trips(props) {
   const [age, setAge] = React.useState("");
-  const [type, setType] = React.useState("");
+  const [type, setType] = React.useState("all");
   const [tripz, setTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
   const [route, setRoute] = React.useState({});
@@ -69,8 +70,8 @@ function Trips(props) {
     history("/complete-signUp");
   };
 
-   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
-   const totalRiders = getAllRIderQueryResult?.data?.data;
+  const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
+  const totalRiders = getAllRIderQueryResult?.data?.data;
 
   const getAllCompanyQueryResult = UserApi.useGetAllTripsQuery({
     //  userType: "company",
@@ -80,7 +81,7 @@ function Trips(props) {
   //  setTrips(totalTrips)
   useEffect(() => {
     // if (trips.length > 0) setTripz(trips);
-     setTripz(totalTrips);
+    setTripz(totalTrips);
   }, [totalTrips]);
 
   function createData(
@@ -221,10 +222,16 @@ function Trips(props) {
   };
 
   const filterTrips = (type) => {
+    if (type == "all") {
+      setTripz(totalTrips);
+    setType(type);
+
+      return
+    }
     trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
     if (trips.length > 0) setTripz(trips);
     else setTripz([]);
-    setType(type)
+    setType(type);
     //  tripz.length > 0 ? tripz : totalTrips;
     //  setTripz(trips)
   };
@@ -250,6 +257,13 @@ function Trips(props) {
                 Trips
               </Typography>
               <Button
+                onClick={() => filterTrips("all")}
+                color={type == "all" ? "primary" : "buttonhead"}
+                className=" ml-5 px-16"
+              >
+                All
+              </Button>
+              <Button
                 onClick={() => filterTrips("completed")}
                 color={type == "completed" ? "primary" : "buttonhead"}
                 className={"ml-4 px-16"}
@@ -263,28 +277,21 @@ function Trips(props) {
               >
                 Enroute
               </Button>
-              <Badge badgeContent={4} color="error">
-                <Button
-                  onClick={() => filterTrips("request")}
-                  className=" ml-3 px-12"
-                  color={type == "request" ? "primary" : "buttonhead"}
-                >
-                  Pending
-                </Button>
-              </Badge>{" "}
+              {/* <Badge badgeContent={4} color="error"> */}
+              <Button
+                onClick={() => filterTrips("request")}
+                className=" ml-3 px-12"
+                color={type == "request" ? "primary" : "buttonhead"}
+              >
+                Pending
+              </Button>
+              {/* </Badge>{" "} */}
               <Button
                 onClick={() => filterTrips("rejected")}
                 color={type == "rejected" ? "primary" : "buttonhead"}
                 className=" ml-5 px-16"
               >
                 Declined
-              </Button>
-              <Button
-                onClick={() => filterTrips("all")}
-                color={type == "all" ? "primary" : "buttonhead"}
-                className=" ml-5 px-16"
-              >
-                All
               </Button>
             </div>
 
@@ -400,13 +407,13 @@ function Trips(props) {
                 <h6 className="font-bold text-[#454647]">Fee</h6>
               </div>
               <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Departure Date</h6>
+                <h6 className="font-bold text-[#454647]">Request Time</h6>
               </div>
               <div className="w-[11.11%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Arrival Date</h6>
               </div>
               <div className="w-[11.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Time Delay</h6>
+                <h6 className="font-bold text-[#454647]">Total Time Spent</h6>
               </div>
               {/* *Put back Action */}
 
@@ -414,47 +421,51 @@ function Trips(props) {
                 <h6 className="font-bold text-[#454647]">Action</h6>
               </div> */}
             </div>
-           {tripz?.length>0? <div className="mt-3 background-table">
-              {tripz?.map((row, idx) => (
-                <div
-                  className="flex"
-                  key={idx}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    marginTop: 10,
-                    backgroundColor: "",
-                  }}
-                >
-                  <div className="w-[11.11%] border3b px-3 py-3  text-center">
-                    {row?.pickUpAddress}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row?.destAddress}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {getRider(row?.riderId) || "-"}
-                  </div>
-                  <div className="w-[19.11%]  px-3 py-3  border3b text-center">
-                    {row?.riderId}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    <p className="bg-[#03732930] px-3 py-1 text-[#0C3BAA] font-semibold">
-                      {row?.tripRequestStatus}
-                    </p>
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {numberWithCommas(row?.tripAmt)}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.departureDate || "-"}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    {row.arrivalDate || "-"}
-                  </div>
-                  <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                    -
-                  </div>
-                  {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
+            {tripz?.length > 0 ? (
+              <div className="mt-3 background-table">
+                {tripz?.map((row, idx) => (
+                  <div
+                    className="flex"
+                    key={idx}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      marginTop: 10,
+                      backgroundColor: "",
+                    }}
+                  >
+                    <div className="w-[11.11%] border3b px-3 py-3  text-center">
+                      {row?.pickUpAddress}
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      {row?.destAddress}
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      {getRider(row?.riderId) || "-"}
+                    </div>
+                    <div className="w-[19.11%]  px-3 py-3  border3b text-center">
+                      {row?.riderId}
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      <p className="bg-[#03732930] px-3 py-1 text-[#0C3BAA] font-semibold">
+                        {row?.tripRequestStatus}
+                      </p>
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      ₦ {numberWithCommas(row?.tripAmt)}
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      {moment(row.requestTime)?.format("ll") || "-"}
+                      <Typography className="text-xs text-gray-500">
+                        {moment(row.requestTime)?.format(" H:mm:ss") || "-"}
+                      </Typography>
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      {row.arrivalDate || "-"}
+                    </div>
+                    <div className="w-[11.11%]  px-3 py-3  border3b text-center">
+                      -
+                    </div>
+                    {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
                     <Button
                       onClick={() => {
                         handleShow(row);
@@ -463,9 +474,12 @@ function Trips(props) {
                       View Route
                     </Button>
                   </div> */}
-                </div>
-              ))}
-            </div>:'No data'}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              "No data"
+            )}
           </div>
 
           {/* <Table
@@ -474,7 +488,7 @@ function Trips(props) {
           >
             <TableHead
               sx={{
-                padding: "100px",
+                padding: "100px",f
                 backgroundColor: "#EBEBEB",
                 border: "2px solid red",
               }}

@@ -19,7 +19,12 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 import { RouteEnum } from "constants/RouteConstants";
-import LoginHeader from "common/LoginHeader";
+
+
+import sedan from "images/sedan.png";
+
+
+
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -61,6 +66,7 @@ import socketio from "socket.io-client";
 function Trips(props) {
   const [map, setMap] = useState(/** @type google.maps.map*/ (null));
   const [distance, setDistance] = useState(/** @type google.maps.map*/ (null));
+  const [allRiders, setAllRiders] = useState([]);
   const [duration, setDuration] = useState(/** @type google.maps.map*/ (null));
   const [directionResponse, setDirectionResponse] = useState(
     /** @type google.maps.map*/ (null)
@@ -97,6 +103,7 @@ function Trips(props) {
       auth: true,
     });
     console.log(res.data.data);
+    setAllRiders(res.data.data)
     return res.data.data.length;
   };
 
@@ -235,11 +242,15 @@ function Trips(props) {
     setDuration(result.routes[0].legs[0].duration.text);
   };
 
+  const getLocationData = (locData)=>{
+
+  }
+
   //eslint-disable-next-line no-undef
 
   const center = {
-    lat: 6.458985,
-    lng: 3.601521,
+    lat: allRiders[1]?.gpsLoc[1],
+    lng: allRiders[1]?.gpsLoc[0],
   };
 
   const centers = [
@@ -313,7 +324,7 @@ function Trips(props) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={10}
+        zoom={18}
         options={{
           zoomControl: false,
           streetViewControl: false,
@@ -342,13 +353,28 @@ function Trips(props) {
               //   // anchor: new google.maps.Point(markerSize / 2, markerSize / 2),
               // }}
             /> */}
-            <Marker
-              icon={
-                "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-              }
-              position={centers[0]}
-            />
-            <Marker
+            {allRiders.map(
+              (e) =>
+                e?.gpsLoc && (
+                  <div>
+                    <Marker
+                      style={{ width: "10px" }}
+                      onClick={() => {
+                        getLocationData(e);
+                      }}
+                      icon={{
+                        path: window.google.maps.SymbolPath
+                          .FORWARD_CLOSED_ARROW,
+                        scale: 3,
+                      }}
+                      position={{ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] }}
+                      label={e?.fname}
+                    />
+                  </div>
+                )
+            )}
+
+            {/* <Marker
               icon={
                 "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
               }
@@ -360,7 +386,7 @@ function Trips(props) {
                 "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
               }
               position={centers[2]}
-            />
+            /> */}
           </div>
         )}
         {directionResponse && (

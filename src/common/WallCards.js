@@ -141,7 +141,9 @@ function WallCards(props) {
                   : "text-center font-bold text-primary-main z-10 "
               }
             >
-              {props.count || 20}
+              {props.name == "Earnings"
+                ? props.count&&`₦ ${props.count} `
+                : props.count}
             </Typography>
           </div>
         </CardContent>
