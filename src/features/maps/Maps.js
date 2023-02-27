@@ -98,13 +98,13 @@ function Trips(props) {
 
   const ridersUnderCompanyR = async (companyId) => {
     const res = await get({
-      endpoint: `api/super-admin/getAllRiders`,
+      endpoint: `api/super-admin/getActiveRiders`,
       //  body: { ...payload },
       auth: true,
     });
-    console.log(res.data.data);
-    setAllRiders(res.data.data)
-    return res.data.data.length;
+    console.log(res?.data);
+    setAllRiders(res?.data)
+    return res?.data?.length;
   };
 
   // const initSocket = () => {
@@ -249,8 +249,8 @@ function Trips(props) {
   //eslint-disable-next-line no-undef
 
   const center = {
-    lat: allRiders[1]?.gpsLoc[1],
-    lng: allRiders[1]?.gpsLoc[0],
+    lat: allRiders[0]?.gpsLoc[1],
+    lng: allRiders[0]?.gpsLoc[0],
   };
 
   const centers = [
