@@ -34,6 +34,7 @@ import trustedBy3 from "images/Rectangle 106.png";
 // import trustedBy3 from './images/trustedBy-3.png'
 // import trustedBy4 from './images/trustedBy-4.png'
 import {
+  Avatar,
   Button,
   Card,
   CardActions,
@@ -115,23 +116,25 @@ function ManageCompaniesTable(props) {
   return (
     <div>
       {/* { props.tableArray.map((e)=> */}
-      <div>
+      <div className="w-full">
         <div
           onClick={openBelow}
           style={{ border: "1px solid #DADADA" }}
-          className=" cursor-pointer mt-2 flex border2 background-table min-h-[50%]"
+          className=" cursor-pointer mt-2 px-2 w-full flex border2 background-table min-h-[50%]"
         >
-          <div className="w-1/2  p-3 ">
-            <img
-              src={props?.tableArray?.image}
-              className="rounded-full h-16 w-16"
-            />
-          </div>
-          <div className="w-full  p-3 ">
-            <p className="medium-size">Name</p>
-            <Typography variant="" class="text-sm">
-              {props?.tableArray?.name}
-            </Typography>
+          <div className="w-[20%] py-3  flex gap-2">
+            
+              <Avatar
+                src={props?.tableArray?.image}
+                className="rounded-full border h-12 w-12"
+              />
+           
+            <div className="">
+              <p className="medium-size">Name</p>
+              <Typography variant="" class="text-sm">
+                {props?.tableArray?.name}
+              </Typography>
+            </div>
           </div>
           {/* <div className="w-full  p-3 ">
             <p className="medium-size">company</p>
@@ -139,25 +142,25 @@ function ManageCompaniesTable(props) {
               {props?.tableArray?.company}
             </Typography>
           </div> */}
-          <div className="w-full  p-3 ">
+          <div className="w-[25%]   p-3 ">
             <p className="medium-size">Email</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.id}
             </Typography>
           </div>
-          <div className="w-full  p-3 ">
+          <div className="w-[15%]   p-3 ">
             <p className="medium-size">Reg. Date</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.ratings}
             </Typography>
           </div>
-          <div className="w-full  p-3 ">
+          <div className="w-[20%]   p-3 ">
             <p className="medium-size">Mobile No.</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.phoneNo}
             </Typography>
           </div>
-          <div className="w-full  p-3 ">
+          <div className="w-[15%]   p-3 ">
             <p className="medium-size">Trips Completed</p>
             <Typography variant="" class="text-sm">
               {props?.tableArray?.tripsCompleted}
@@ -169,7 +172,7 @@ function ManageCompaniesTable(props) {
               {props?.tableArray?.status}
             </Typography>
           </div> */}
-          <div className="w-1/2   p-3">
+          <div className="w-[8%]    p-3">
             <p className="medium-size">
               {!show ? (
                 <MdOutlineKeyboardArrowDown
