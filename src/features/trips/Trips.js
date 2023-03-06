@@ -224,9 +224,9 @@ function Trips(props) {
   const filterTrips = (type) => {
     if (type == "all") {
       setTripz(totalTrips);
-    setType(type);
+      setType(type);
 
-      return
+      return;
     }
     trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
     if (trips.length > 0) setTripz(trips);
@@ -423,7 +423,7 @@ function Trips(props) {
             </div>
             {tripz?.length > 0 ? (
               <div className="mt-3 background-table">
-                {tripz?.map((row, idx) => (
+                {tripz.reverse()?.map((row, idx) => (
                   <div
                     className="flex"
                     key={idx}
