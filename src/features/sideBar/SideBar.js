@@ -34,12 +34,17 @@ import { RouteEnum } from "constants/RouteConstants";
 import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
 import useLogout from "hooks/useLogout";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const drawerWidth = 240;
 
 export default function PermanentDrawerLeft() {
   const history = useNavigate();
   const { logout } = useLogout();
+const location = useLocation();
+const currentUrl = location.pathname;
+
 
   const [outcasts, setOutcasts] = React.useState([
     { name: "Logout", linx: RouteEnum.HOME, image: logouts },
@@ -114,6 +119,11 @@ export default function PermanentDrawerLeft() {
     // logout()
   };
 
+   useEffect(() => {
+     changeColorOnActive();
+   }, [currentUrl]);
+
+
   // const logout = (push) => {
   //   localStorage.clear();
   //   console.log("hi");
@@ -129,8 +139,8 @@ export default function PermanentDrawerLeft() {
       d: e.d,
       image: e.image,
       image2: e.image2,
-      imageboolean: num == index ? true : false,
-      color: num == index ? true : false,
+      imageboolean: e.d == currentUrl ? true : false,
+      color: e.d == currentUrl ? true : false,
     }));
 
     console.log(k);
