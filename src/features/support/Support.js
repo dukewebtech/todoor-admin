@@ -126,7 +126,13 @@ function ManageRiders(props) {
   return (
     <div>
       <ToDoorSearch />
-      {!show && (
+
+      <Button>
+        <a href=" https://tawk.to/chat/6401e42f4247f20fefe3c351/1gqjm6n0q ">
+          Please click here to be directed to our support page
+        </a>
+      </Button>
+      {/* {!show && (
         <div>
           <div className="mb-4">
             <Button
@@ -179,17 +185,13 @@ function ManageRiders(props) {
                   View Profile
                 </p>
               </div>
-              {/* <div className='w-full  p-3 '>
-                                <p className='medium-size'>ID Number</p>
-                                <Typography variant='h6'>{e.id}</Typography>
-        
-                            </div> */}
+              
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
-      {show && <SupportChart setOpen={setShow} open={show} />}
+      {/* {show && <SupportChart setOpen={setShow} open={show} />} */}
     </div>
   );
 }

@@ -58,6 +58,7 @@ function Trips(props) {
   const [age, setAge] = React.useState("");
   const [type, setType] = React.useState("all");
   const [tripz, setTripz] = React.useState([]);
+  const [newtripz, setNewTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
   const [route, setRoute] = React.useState({});
   const handleChange = (event) => {
@@ -76,13 +77,18 @@ function Trips(props) {
   const getAllCompanyQueryResult = UserApi.useGetAllTripsQuery({
     //  userType: "company",
   });
-  const totalTrips = getAllCompanyQueryResult?.data;
+  const totalTrips = getAllCompanyQueryResult?.data||[];
   let trips = totalTrips;
   //  setTrips(totalTrips)
   useEffect(() => {
     // if (trips.length > 0) setTripz(trips);
     setTripz(totalTrips);
+    setNewTripz([...totalTrips].reverse());
+
+    // console.log(reversedArr)
   }, [totalTrips]);
+
+  console.log(newtripz)
 
   function createData(
     origin,
@@ -224,13 +230,20 @@ function Trips(props) {
   const filterTrips = (type) => {
     if (type == "all") {
       setTripz(totalTrips);
-      setType(type);
+    setNewTripz([...totalTrips].reverse());
 
-      return;
+    setType(type);
+
+      return
     }
     trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
-    if (trips.length > 0) setTripz(trips);
-    else setTripz([]);
+    if (trips.length > 0) {
+      setTripz(trips);
+    setNewTripz([...trips].reverse());
+
+    } else {setTripz([]) 
+    setNewTripz([]);
+    };
     setType(type);
     //  tripz.length > 0 ? tripz : totalTrips;
     //  setTripz(trips)
@@ -421,9 +434,9 @@ function Trips(props) {
                 <h6 className="font-bold text-[#454647]">Action</h6>
               </div> */}
             </div>
-            {tripz?.length > 0 ? (
+            {newtripz?.length > 0 ? (
               <div className="mt-3 background-table">
-                {tripz.reverse()?.map((row, idx) => (
+                {newtripz?.map((row, idx) => (
                   <div
                     className="flex"
                     key={idx}
