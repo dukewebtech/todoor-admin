@@ -30,6 +30,17 @@ export const UserApi = SoftwrkApi.injectEndpoints({
       },
     }),
 
+    getCategories: builder.query({
+      query: (arg) => {
+        const { userType } = arg;
+        return {
+          url: `${BASE_URL}/category`,
+          method: "GET",
+          // params: { userType },
+        };
+      },
+    }),
+
     getAll: builder.query({
       query: (arg) => {
         const { userType } = arg;

@@ -73,4 +73,9 @@ const ROUTES = configureRoutes([
     path: RouteEnum.SUPPORT,
     element: lazy(() => import("features/support/Support")),
   },
+
+  {
+    path: RouteEnum.SETTINGS,
+    element: lazy(() => import("features/settings/Categories")),
+  },
 ]);
