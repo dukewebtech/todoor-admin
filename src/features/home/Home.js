@@ -86,140 +86,105 @@ function Home(props) {
     },
   });
 
-
-  // if (authUser.accessToken) {
-  //   return <Navigate to={RouteEnum.HOME} />;
-  // }
-
   return (
-    // <div>
-    //  {/* <Typography variant="h6">Hi</Typography> */}
-    //   <form onSubmit={formik.handleSubmit}>
-    //     <TextField
-    //       label="email"
-    //       {...getTextFieldFormikProps(formik, "email")}
-    //     />
-    //     <PasswordTextField
-    //       label="Password"
-    //       {...getTextFieldFormikProps(formik, "password")}
-    //     />
-    //     <Button type="submit">Submit</Button>
-    //   </form>
-    // </div>
-    <div className="z  pl-24">
-      <div className="flex justify-between ">
-        <div
-          className="pt-4"
-          style={{
-            paddingLeft: "",
-            paddingRight: "",
-            minWidth: "40%",
-            // maxWidth: "75%",
-          }}
-        >
-          <LoginHeader />
-          <div className="flex-vertical">
-            <div className="my-8">
-              <Typography variant="h3" className="mb-2 mt-3 font-bold">
-                Sign In
-              </Typography>
-              {/* <p>Enter your credentials to create your account.</p> */}
-            </div>
+   
+    <div className=" w-full pl-16">
+      <div className="flex justify-between">
+        <div className="pt-4 w-2/5">
+          <div className="flex flex-col w-full h-full  ">
+            <LoginHeader />
 
-            <form onSubmit={formik.handleSubmit}>
-              <Typography variant="h6" className="mb-2">
-                Email Address
-              </Typography>
-              <TextField
-                size="medium"
-                className="w-full"
-                placeholder="Enter your email"
-                // onChange={handleChange}
-                //     onChange={(e)=>{
-                //   alert('k')
-                //   // console.log(e)
-                //   // localStorage.setItem ('location', e.target.value)
-                // }}
-                name="email"
-                {...getTextFieldFormikProps(formik, "email")}
-              />
-
-              <Typography variant="h6" className="mt-10 mb-2">
-                Choose Password
-              </Typography>
-
-              <PasswordTextField
-                className="w-full "
-                placeholder="Enter your Password"
-                // type="password"
-                // onChange={handleChange}
-                //     onChange={(e)=>{
-                //   alert('k')
-                //   // console.log(e)
-                //   // localStorage.setItem ('password', e.target.value)
-                // }}
-                name="password"
-                {...getTextFieldFormikProps(formik, "password")}
-              />
-
-              <FormGroup>
-                <FormControlLabel
-                  className="mt-5"
-                  control={<Checkbox defaultChecked />}
-                  label="Remember Information"
-                />
-              </FormGroup>
-
-              {/* <Input placeholder='Location' className='m-b-20'/> */}
-
-              <div className="text-white m-b-30 mt-5  ">
-                <Button
-                  className="p-3 w-full text-base"
-                  type="submit"
-                  // onClick={() => localStorage.setItem('type', 'CLIENT')}
-                  // className=' '
-                >
+            <div className="w-full h-full">
+              <div className="my-8">
+                <Typography variant="h3" className="font-bold">
                   Sign In
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={<FcGoogle />}
-                  className="p-3 bg-white text-base text-black mt-4 w-full"
-                  type="submit"
-                  // onClick={() => localStorage.setItem('type', 'CLIENT')}
-                  // className=' '
-                >
-                  Sign In With Google
-                </Button>
+                </Typography>
+                {/* <p>Enter your credentials to create your account.</p> */}
               </div>
-            </form>
-
-            <a className="text-center" href="">
-              <h2 className="mb-5">
-                Already have an account?
-                <b className="ml-1  color{#039836}">Sign In</b>
-              </h2>
-            </a>
+              <form onSubmit={formik.handleSubmit}>
+                <Typography variant="h6" className="mb-2">
+                  Email Address
+                </Typography>
+                <TextField
+                  size="medium"
+                  className="w-full"
+                  placeholder="Enter your email"
+                  // onChange={handleChange}
+                  //     onChange={(e)=>{
+                  //   alert('k')
+                  //   // console.log(e)
+                  //   // localStorage.setItem ('location', e.target.value)
+                  // }}
+                  name="email"
+                  {...getTextFieldFormikProps(formik, "email")}
+                />
+                <Typography variant="h6" className="mt-10 mb-2">
+                  Choose Password
+                </Typography>
+                <PasswordTextField
+                  className="w-full "
+                  placeholder="Enter your Password"
+                  // type="password"
+                  // onChange={handleChange}
+                  //     onChange={(e)=>{
+                  //   alert('k')
+                  //   // console.log(e)
+                  //   // localStorage.setItem ('password', e.target.value)
+                  // }}
+                  name="password"
+                  {...getTextFieldFormikProps(formik, "password")}
+                />
+                <FormGroup>
+                  <FormControlLabel
+                    className="mt-5"
+                    control={<Checkbox defaultChecked />}
+                    label="Remember Information"
+                  />
+                </FormGroup>
+                {/* <Input placeholder='Location' className='m-b-20'/> */}
+                <div className="text-white m-b-30 mt-5  ">
+                  <Button
+                    className="p-3 w-full text-base"
+                    type="submit"
+                    // onClick={() => localStorage.setItem('type', 'CLIENT')}
+                    // className=' '
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<FcGoogle />}
+                    className="p-3 bg-white text-base text-black mt-4 w-full"
+                    type="submit"
+                    // onClick={() => localStorage.setItem('type', 'CLIENT')}
+                    // className=' '
+                  >
+                    Sign In With Google
+                  </Button>
+                </div>
+              </form>
+              {/* <a className="text-center " href="">
+                <h2 className="">
+                  Already have an account?
+                  <b className="ml-1  color{#039836}">Sign In</b>
+                </h2>
+              </a> */}
+            </div>
           </div>
         </div>
         <div
-          className="relative min-h-screen flex-vertical items-stretch py-64 bg-primary-main text-white pl-10 justify-center w-2/5"
+          className="relative min-h-screen  flex flex-col items-stretch bg-primary-main text-white p-10 justify-center w-2/5"
           style={{
-            width: "40%",
-            height: "100%",
             position: "relative",
-            
             backgroundImage: `url('${snake}')`,
-            // minHeight:"500px"
-            // backgroundColor: "green",
           }}
         >
           {/* <img
             className="relative w-[100%] h-[100%]"
             src={snake}
           /> */}
-          <div className="z-10">
-            <Typography variant="h1" className="mt-10 font-bold">
+          <div className="z-10 mx-auto">
+            <Typography variant="h1" className=" font-bold">
               {/* Earn */}
               Admin
             </Typography>
