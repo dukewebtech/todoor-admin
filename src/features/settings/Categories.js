@@ -41,7 +41,6 @@ function Categories(props) {
   const [categoryName, setCategoryName] = useState(false);
   const [bike, setbike] = useState();
 
-  
   const [currencySymbol, setcurrencySymbol] = useState();
 
   const [basefare, setbasefare] = useState();
@@ -56,9 +55,9 @@ function Categories(props) {
   //   console.log(event)
   // };
 
-  useEffect(()=>{
-getConfig()
-  },[])
+  useEffect(() => {
+    getConfig();
+  }, []);
   const getCategoriesQueryResult = UserApi.useGetCategoriesQuery({ age: age });
   const categories = getCategoriesQueryResult?.data;
 
@@ -94,9 +93,9 @@ getConfig()
         key: "",
       },
       tripPrice: {
-        farePerMin: farepermin,
-        farePerKm: fareperKM,
-        baseFare: basefare,
+        farePerMin: +farepermin,
+        farePerKm: +fareperKM,
+        baseFare: +basefare,
         currencySymbol: "N",
       },
       googleAuth: {
@@ -258,14 +257,29 @@ getConfig()
                   label="Base Fare"
                   placeholder="Base Fare"
                   className="w-full mt-4"
-                  onChange={(e) => setbasefare(e.target.value)}
+                  value={basefare}
+                  onChange={(e) => {
+                    const regex = /^[0-9\b]+$/;
+                    if (e.target.value === "" || regex.test(e.target.value)) {
+                      setbasefare(e.target.value);
+                      // setNum(e.target.value);
+                    }
+                  }}
+                  // onChange={(e) => setbasefare(e.target.value)}
                 />
                 <TextField
                   fullWidth
                   label="Fare per KM"
                   placeholder="Fare per Min"
                   className="w-full mt-4"
-                  onChange={(e) => setfareperKM(e.target.value)}
+                  value={fareperKM}
+                  onChange={(e) => {
+                    const regex = /^[0-9\b]+$/;
+                    if (e.target.value === "" || regex.test(e.target.value)) {
+                      setfareperKM(e.target.value);
+                      // setNum(e.target.value);
+                    }
+                  }}
                 />
                 <TextField
                   disabled
