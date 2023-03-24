@@ -170,7 +170,7 @@ console.log(companyStatistics);
             small={true}
             name="Earnings"
             count={numberWithCommas(
-              companyStatistics && companyStatistics?.total_earnings
+              companyStatistics && companyStatistics?.total_earnings?.toFixed(2)
             )}
           />
         </div>
