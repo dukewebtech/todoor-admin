@@ -40,6 +40,17 @@ export const UserApi = SoftwrkApi.injectEndpoints({
         };
       },
     }),
+    getAllBikes: builder.query({
+      query: (arg) => {
+        const { pageNo } = arg;
+        console.log(pageNo);
+        return {
+          url: `${BASE_URL}/company/bikes`,
+          method: "GET",
+          params: { pageNo },
+        };
+      },
+    }),
 
     getAll: builder.query({
       query: (arg) => {

@@ -464,7 +464,7 @@ function Trips(props) {
                       </p>
                     </div>
                     <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                      ₦ {numberWithCommas(row?.tripAmt)}
+                      ₦ {numberWithCommas(row?.tripAmt.toFixed(2))}
                     </div>
                     <div className="w-[11.11%]  px-3 py-3  border3b text-center">
                       {moment(row.requestTime)?.format("ll") || "-"}

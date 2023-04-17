@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserApi from "apis/UserApi";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -49,8 +49,11 @@ import {
 import { MdRefresh } from "react-icons/md";
 import ToDoorSearch from "common/ToDoorSearch";
 import moment from "moment";
+import { get } from "services/fetch";
 function ManageRiders(props) {
   const history = useNavigate();
+  const [pageNo, setPageNo] = useState(1);
+  const [allBikez, setAllBikez] = useState([]);
 
   const getAllCompanyQueryResult = UserApi.useGetAllQuery({
     userType: "company",
@@ -60,12 +63,41 @@ function ManageRiders(props) {
   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
   const totalRiders = getAllRIderQueryResult?.data?.data;
 
+   const getAllBikesQueryResult = UserApi?.useGetAllBikesQuery({ pageNo });
+   const totalPages = +getAllRIderQueryResult?.data?.meta?.totalNoOfPages;
+   const bikers = getAllBikesQueryResult?.data?.data;
+
+   const onPageChange = (page) => {
+     setPageNo(page);
+
+     console.log(page);
+   };
+
+    useEffect(() => {
+      getBikes();
+    }, [pageNo]);
+
+    const getBikes = async () => {
+      const res = await get({
+        endpoint: `api/company/getalluser?userType=rider&pageNo=${pageNo}`,
+        auth: true,
+      });
+      setAllBikez(
+        res?.data?.data?.sort((a, b) => a.created_at - b.created_at).reverse()
+      );
+    };
+
+   const pageNumbers = [];
+   for (let i = 1; i <= totalPages; i++) {
+     pageNumbers.push(i);
+   }
+
   const redirect = () => {
     history("/complete-signUp");
   };
 
   const getCompanyName = (id) => {
-    if(totalCompanies && totalRiders && id){
+    if(totalCompanies && allBikez && id){
  let compName = totalCompanies.find((e) => e._id == id);
  console.log(compName?.fname);
     return compName
@@ -74,7 +106,7 @@ function ManageRiders(props) {
    
   };
 
-  const allRiders = totalRiders?.map((e) => ({
+  const allRiders = allBikez?.reverse()?.map((e) => ({
     image: e?.profileUrl,
     name: `${e?.fname}`,
     company: e?.companyId
@@ -161,7 +193,7 @@ function ManageRiders(props) {
             big={true}
             green={true}
             name="Total Riders"
-            count={totalRiders?.length}
+            count={allBikez?.length * totalPages}
           />
         </div>
         <div>
@@ -192,10 +224,10 @@ function ManageRiders(props) {
               <WallCards
                 short={true}
                 name="Active"
-                count={totalRiders?.length-1}
+                count={allBikez?.length - 1}
               />
             </div>
-            <WallCards short={true} name="Non-Active" count={'1'} />
+            <WallCards short={true} name="Non-Active" count={"1"} />
           </div>
         </div>
 
@@ -208,9 +240,92 @@ function ManageRiders(props) {
       <Typography variant="h5" className="font-bold mt-8 text-primary-main">
         All Riders
       </Typography>
+
+      {/* <nav className="flex justify-center">
+        <ul className="flex">
+          {pageNo > 1 && (
+            <li>
+              <a
+                href="#"
+                onClick={() => onPageChange(pageNo - 1)}
+                className="py-2 px-4 bg-gray-400 text-white font-bold rounded-l hover:bg-gray-600"
+              >
+                Prev
+              </a>
+            </li>
+          )}
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <a
+                href="#"
+                onClick={() => onPageChange(number)}
+                className={
+                  pageNo === number
+                    ? "py-2 px-4 bg-primary-main text-white font-bold"
+                    : "py-2 px-4 hover:bg-gray-400/10"
+                }
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+          {pageNo < pageNumbers.length && (
+            <li>
+              <a
+                href="#"
+                onClick={() => onPageChange(pageNo + 1)}
+                className="py-2 px-4 bg-gray-400 text-white font-bold rounded-r hover:bg-gray-600"
+              >
+                Next
+              </a>
+            </li>
+          )}
+        </ul>
+      </nav> */}
       {allRiders?.map((e, idx) => (
         <ManageCompaniesTable tableArray={e} key={idx} />
       ))}
+      <nav className="flex justify-center mt-5">
+        <ul className="flex">
+          {pageNo > 1 && (
+            <li>
+              <a
+                href="#"
+                onClick={() => onPageChange(pageNo - 1)}
+                className="py-2 px-4 bg-gray-400 text-white font-bold rounded-l hover:bg-gray-600"
+              >
+                Prev
+              </a>
+            </li>
+          )}
+          {pageNumbers.map((number) => (
+            <li key={number}>
+              <a
+                href="#"
+                onClick={() => onPageChange(number)}
+                className={
+                  pageNo === number
+                    ? "py-2 px-4 bg-primary-main text-white font-bold"
+                    : "py-2 px-4 hover:bg-gray-400/10"
+                }
+              >
+                {number}
+              </a>
+            </li>
+          ))}
+          {pageNo < pageNumbers.length && (
+            <li>
+              <a
+                href="#"
+                onClick={() => onPageChange(pageNo + 1)}
+                className="py-2 px-4 bg-gray-400 text-white font-bold rounded-r hover:bg-gray-600"
+              >
+                Next
+              </a>
+            </li>
+          )}
+        </ul>
+      </nav>
 
       {/* <div className="flex justify-between my-7">
                         <ManageCompanyCard/>

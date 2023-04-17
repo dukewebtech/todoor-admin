@@ -165,7 +165,7 @@ function Trips({ riders }) {
   ];
 
   const tableArray = totalTrips
-    ?.slice(0, 7)
+    ?.slice(-7)
     ?.reverse()
     ?.map(function (e, idx) {
       return {
@@ -332,7 +332,7 @@ function Trips({ riders }) {
                     {row?.rider || "-"}
                   </div>
                   <div className="w-[19.11%]  px-3 py-3  border3b text-center">
-                    ₦ {numberWithCommas(row?.riderId)}
+                    ₦ {numberWithCommas(row?.riderId.toFixed(2))}
                   </div>
                   <div className="w-[19%]  px-3 py-3  border3b text-center">
                     <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
