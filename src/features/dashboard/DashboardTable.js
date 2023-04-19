@@ -165,14 +165,15 @@ function Trips({ riders }) {
   ];
 
   const tableArray = totalTrips
-    ?.slice(-7)
-    ?.reverse()
+    ?.slice(0,7)
+    
     ?.map(function (e, idx) {
       return {
-        pickUpAddress: getRider(e?.riderId),
+        pickUpAddress: (e?.riderId.fname),
         destAddress: e?.pickUpAddress,
         rider: e?.destAddress,
         riderId: e.tripAmt,
+        riderInfo: e.riderId,
         tripRequestStatus: moment(e?.requestTime)?.format("ll"),
         tripAmt: e?.tripRequestStatus,
       };

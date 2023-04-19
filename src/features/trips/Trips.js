@@ -83,7 +83,7 @@ function Trips(props) {
   useEffect(() => {
     // if (trips.length > 0) setTripz(trips);
     setTripz(totalTrips);
-    setNewTripz([...totalTrips].reverse());
+    setNewTripz([...totalTrips]);
 
     // console.log(reversedArr)
   }, [totalTrips]);
@@ -230,7 +230,7 @@ function Trips(props) {
   const filterTrips = (type) => {
     if (type == "all") {
       setTripz(totalTrips);
-    setNewTripz([...totalTrips].reverse());
+    setNewTripz([...totalTrips]);
 
     setType(type);
 
@@ -239,7 +239,7 @@ function Trips(props) {
     trips = totalTrips?.filter((e) => e?.tripRequestStatus == type);
     if (trips.length > 0) {
       setTripz(trips);
-    setNewTripz([...trips].reverse());
+    setNewTripz([...trips]);
 
     } else {setTripz([]) 
     setNewTripz([]);
@@ -411,7 +411,7 @@ function Trips(props) {
               </div>
 
               <div className="w-[19.11%] text-center  px-3 py-3">
-                <h6 className="font-bold text-[#454647]">Order ID</h6>
+                <h6 className="font-bold text-[#454647]">Company Name</h6>
               </div>
               <div className="w-[11.11%] text-center  px-3 py-3">
                 <h6 className="font-bold text-[#454647]">Status</h6>
@@ -453,10 +453,10 @@ function Trips(props) {
                       {row?.destAddress}
                     </div>
                     <div className="w-[11.11%]  px-3 py-3  border3b text-center">
-                      {getRider(row?.riderId) || "-"}
+                      {(row?.riderId?.fname) || "-"}
                     </div>
                     <div className="w-[19.11%]  px-3 py-3  border3b text-center">
-                      {row?.riderId}
+                      {(row?.companyId?.fname)||'-'}
                     </div>
                     <div className="w-[11.11%]  px-3 py-3  border3b text-center">
                       <p className="bg-[#03732930] px-3 py-1 text-[#0C3BAA] font-semibold">

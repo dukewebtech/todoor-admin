@@ -83,7 +83,7 @@ function ManageRiders(props) {
         auth: true,
       });
       setAllBikez(
-        res?.data?.data?.sort((a, b) => a.created_at - b.created_at).reverse()
+        res?.data?.data
       );
     };
 
@@ -106,7 +106,7 @@ function ManageRiders(props) {
    
   };
 
-  const allRiders = allBikez?.reverse()?.map((e) => ({
+  const allRiders = allBikez?.map((e) => ({
     image: e?.profileUrl,
     name: `${e?.fname}`,
     company: e?.companyId
