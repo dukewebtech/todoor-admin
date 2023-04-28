@@ -49,7 +49,7 @@ import {
 import { MdRefresh } from "react-icons/md";
 import ToDoorSearch from "common/ToDoorSearch";
 import moment from "moment";
-import { get } from "services/fetch";
+import { del, get, post } from "services/fetch";
 function ManageRiders(props) {
   const history = useNavigate();
   const [pageNo, setPageNo] = useState(1);
@@ -85,6 +85,16 @@ function ManageRiders(props) {
       setAllBikez(
         res?.data?.data
       );
+
+      console.log(res.data.data)
+    };
+
+    const deleteBikes = async (id) => {
+      const res = await del({
+        endpoint: `api/super-admin/deleteRider?userId=${id}`,
+        auth: true,
+      });
+     getBikes()
     };
 
    const pageNumbers = [];
@@ -118,6 +128,7 @@ function ManageRiders(props) {
     tripsCompleted: "-",
     phoneNo: e?.phoneNo,
     status: e?.currTripState,
+    userId: e?._id,
   }));
 
   console.log(allRiders);
@@ -283,7 +294,11 @@ function ManageRiders(props) {
         </ul>
       </nav> */}
       {allRiders?.map((e, idx) => (
-        <ManageCompaniesTable tableArray={e} key={idx} />
+        <ManageCompaniesTable
+          deleteBikes={deleteBikes}
+          tableArray={e}
+          key={idx}
+        />
       ))}
       <nav className="flex justify-center mt-5">
         <ul className="flex">

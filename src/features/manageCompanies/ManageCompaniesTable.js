@@ -54,6 +54,7 @@ function ManageCompaniesTable(props) {
   const [suspend, setSuspend] = React.useState(false);
   const [closeModal, setCloseModal] = React.useState("");
   const [show, setShow] = React.useState("");
+  const [deleteId, setDeleteId] = React.useState("");
   // const handleChange = (event) => {
   //   setAge(event.target.value);
   //   console.log(event)
@@ -67,9 +68,10 @@ function ManageCompaniesTable(props) {
   const history = useNavigate();
   console.log(props)
 
-  const openModal = (bol) => {
+  const openModal = (bol, id) => {
     setCloseModal(!closeModal);
     setSuspend(bol);
+    setDeleteId(id)
   };
 
   const redirect = () => {
@@ -123,12 +125,11 @@ function ManageCompaniesTable(props) {
           className=" cursor-pointer mt-2 px-2 w-full flex border2 background-table min-h-[50%]"
         >
           <div className="w-[20%] py-3  flex gap-2">
-            
-              <Avatar
-                src={props?.tableArray?.image}
-                className="rounded-full border h-12 w-12"
-              />
-           
+            <Avatar
+              src={props?.tableArray?.image}
+              className="rounded-full border h-12 w-12"
+            />
+
             <div className="">
               <p className="medium-size">Name</p>
               <Typography variant="" class="text-sm">
@@ -223,7 +224,7 @@ function ManageCompaniesTable(props) {
               </Button>
               {/* <Button className='px-6 min-w-[110px] ml-2'>Call</Button> */}
               <HiOutlineTrash
-                onClick={() => openModal(false)}
+                onClick={() => openModal(false, props?.tableArray?.userId)}
                 style={{
                   fontSize: "26px",
                   cursor: "pointer",
@@ -235,9 +236,11 @@ function ManageCompaniesTable(props) {
         )}
         <Modal
           suspend={suspend}
+          deleteId={deleteId}
           openModal={openModal}
           closeModal={closeModal}
-          companyId={props?.tableArray?.id}
+          companyId={deleteId}
+          deleteRider={props?.deleteBikes}
         />
       </div>
       {/* )} */}

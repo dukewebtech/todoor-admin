@@ -1,40 +1,45 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { post, get, put, del } from "services/fetch";
 
-
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  borderRadius:'3%',
+  bgcolor: "background.paper",
+  borderRadius: "3%",
   // border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-export default function BasicModal({closeModal, openModal, suspend,companyId}) {
+export default function BasicModal({
+  closeModal,
+  openModal,
+  suspend,
+  companyId,
+  deleteRider,
+}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(companyId)
+  console.log(companyId);
 
-  const deleteRider = async () => {
-    const res = await del({
-      endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
-      //  body: { ...payload },
-      auth: true,
-    });
-    console.log(res.data.data);
-    //  setCompanyEarns(res.data.data);
-  };
+  // const deleteRider = async () => {
+  //   const res = await del({
+  //     endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
+  //     //  body: { ...payload },
+  //     auth: true,
+  //   });
+  //   console.log(res.data.data);
+  //   //  setCompanyEarns(res.data.data);
+  // };
   return (
     <div>
       {/* <Button onClick={handleOpen}>Open modal</Button> */}
@@ -75,7 +80,10 @@ export default function BasicModal({closeModal, openModal, suspend,companyId}) {
                   Cancel
                 </Button>{" "}
                 <Button
-                  onClick={() => deleteRider()}
+                  onClick={() => {
+                    deleteRider(companyId);
+                    openModal(false)
+                  }}
                   className="w-[80%] bg-[#FF2828]"
                 >
                   Delete

@@ -62,13 +62,33 @@ import socketio from "socket.io-client";
 function Trips(props) {
   const [map, setMap] = useState(/** @type google.maps.map*/ (null));
   const [distance, setDistance] = useState(/** @type google.maps.map*/ (null));
+  const [center, setCenter] = useState(
+    /** @type google.maps.map*/ ({
+      lat: 6,
+      lng: 5,
+    })
+  );
   const [allRiders, setAllRiders] = useState([]);
-  const [duration, setDuration] = useState(/** @type google.maps.map*/ (null));
+  const [duration,setDuration] = useState(/** @type google.maps.map*/ (null));
+  const [zoom, setZoom] = useState(/** @type google.maps.map*/ (30));
   const [directionResponse, setDirectionResponse] = useState(
     /** @type google.maps.map*/ (null)
   );
+
+  const mapRef = useRef(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
   let SOCKET_URL = `todoorapp.com:3000`;
   let token = localStorage.getItem("token").slice(0, 7);
+
+
+  const onMarkerClick = (marker) => {
+    setSelectedMarker(marker);
+    const map = mapRef.current;
+    if (map) {
+      map.panTo(marker.getPosition());
+      map.setZoom(15);
+    }
+  };
 
   // const [center, setcenter] = useState({
   //   lat: 6.458985,
@@ -95,7 +115,7 @@ function Trips(props) {
       //  body: { ...payload },
       auth: true,
     });
-    console.log(res?.data);
+    // console.log(res?.data);
     setAllRiders(res?.data);
     return res?.data?.length;
   };
@@ -137,7 +157,7 @@ function Trips(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      ridersUnderCompanyR()
+      ridersUnderCompanyR();
       // const deleteRider = async () => {
       // const res = await get({
       //   endpoint: `api/super-admin/getAllRiders`,
@@ -202,8 +222,6 @@ function Trips(props) {
       timeDelay,
     };
   }
-  console.log(process.env.TO_DOOR_MAP_API_KEY);
-  console.log(process.env.REACT_APP_SOFTWORK_API);
 
   const { isLoaded } = useJsApiLoader({
     // id: "google-map-script",
@@ -235,14 +253,20 @@ function Trips(props) {
     setDuration(result.routes[0].legs[0].duration.text);
   };
 
-  const getLocationData = (locData) => {};
+ const getLocationData = (e) => {
+  // setDestination({ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] });
+  if (map) {
+    const bounds = new window.google.maps.LatLngBounds();
+    bounds.extend(new window.google.maps.LatLng(center.lat, center.lng));
+    bounds.extend(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
+    map.fitBounds(bounds);
+    map.panTo(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
+  }
+};
 
   //eslint-disable-next-line no-undef
 
-  const center = {
-    lat: allRiders[0]?.gpsLoc[1],
-    lng: allRiders[0]?.gpsLoc[0],
-  };
+ 
   const labelStyle = {
     // text: "Bike",
     color: "white",
@@ -309,31 +333,15 @@ function Trips(props) {
               fontSize={12}
             />
 
-            <p>Online {allRiders?.map((e)=>e.isAvailable)?.length}</p>
+            <p>Online {allRiders?.map((e) => e.isAvailable)?.length}</p>
           </div>
-          {/* <div className=" flex items-center">
-            <BsCircleFill
-              className="mr-1"
-              style={{ color: "#F7AD2B" }}
-              color="red"
-              fontSize={12}
-            />
-            <p>A bit congested</p>
-          </div> */}
-          {/* <div className=" flex items-center">
-            <BsCircleFill
-              className="mr-1"
-              style={{ color: "#FF0000" }}
-              fontSize={12}
-            />
-            <p>Congested</p>
-          </div> */}
+        
         </div>
       </div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={18}
+        zoom={zoom}
         options={{
           zoomControl: false,
           streetViewControl: false,
@@ -341,8 +349,7 @@ function Trips(props) {
           fullscreenControl: false,
         }}
         onLoad={(map) => setTimeout(() => setMap(map))}
-        // onLoad={(map) => setMap(map)}
-        //   onUnmount={onUnmount}
+       
       >
         {map && (
           <div>
@@ -357,17 +364,7 @@ function Trips(props) {
                           onClick={() => {
                             getLocationData(e);
                           }}
-                          // icon={{
-                          //   path: window.google.maps.SymbolPath
-                          //     .FORWARD_CLOSED_ARROW,
-                          //   scale: 3,
-                          // }}
-                          // icon={{
-                          //   url: "../../images/attach-circle.png",
-                          //   scaledSize: new window.google.maps.Size(50, 50),
-                          //   origin: new window.google.maps.Point(0, 0),
-                          //   anchor: new window.google.maps.Point(25, 25),
-                          // }}
+                         
                           icon={bikeIcon}
                           position={{ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] }}
                           label={{
@@ -382,19 +379,7 @@ function Trips(props) {
                 )
             )}
 
-            {/* <Marker
-              icon={
-                "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-              }
-              position={centers[1]}
-            />
-
-            <Marker
-              icon={
-                "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-              }
-              position={centers[2]}
-            /> */}
+           
           </div>
         )}
         {directionResponse && (
