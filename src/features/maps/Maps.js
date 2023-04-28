@@ -21,6 +21,7 @@ import {
 import { RouteEnum } from "constants/RouteConstants";
 
 import sedan from "images/sedan.png";
+import markerImage from "images/todoor image.png";
 
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -62,15 +63,13 @@ import socketio from "socket.io-client";
 function Trips(props) {
   const [map, setMap] = useState(/** @type google.maps.map*/ (null));
   const [distance, setDistance] = useState(/** @type google.maps.map*/ (null));
-  const [center, setCenter] = useState(
-    /** @type google.maps.map*/ ({
-      lat: 6,
-      lng: 5,
-    })
-  );
+  const [center, setCenter] = useState({
+    lat: 7,
+    lng: 5,
+  });
   const [allRiders, setAllRiders] = useState([]);
-  const [duration,setDuration] = useState(/** @type google.maps.map*/ (null));
-  const [zoom, setZoom] = useState(/** @type google.maps.map*/ (30));
+  const [duration, setDuration] = useState(/** @type google.maps.map*/ (null));
+  const [count, setcount] = useState(0);
   const [directionResponse, setDirectionResponse] = useState(
     /** @type google.maps.map*/ (null)
   );
@@ -79,7 +78,6 @@ function Trips(props) {
   const [selectedMarker, setSelectedMarker] = useState(null);
   let SOCKET_URL = `todoorapp.com:3000`;
   let token = localStorage.getItem("token").slice(0, 7);
-
 
   const onMarkerClick = (marker) => {
     setSelectedMarker(marker);
@@ -108,6 +106,10 @@ function Trips(props) {
   //     lng: -122.424,
   //   },
   // ]);
+  // let center = {
+  //   lat: allRiders[0]?.gpsLoc[1],
+  //   lng: allRiders[0]?.gpsLoc[0],
+  // };
 
   const ridersUnderCompanyR = async (companyId) => {
     const res = await get({
@@ -118,6 +120,28 @@ function Trips(props) {
     // console.log(res?.data);
     setAllRiders(res?.data);
     return res?.data?.length;
+  };
+
+  const ridersUnderCompanyK = async (companyId) => {
+    const res = await get({
+      endpoint: `api/super-admin/getActiveRiders`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res?.data[0]);
+    getLocationData(res?.data[0]);
+  };
+  const getLocationData = (e) => {
+    // setDestination({ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] });
+    if (map) {
+      console.log(e?.gpsLoc);
+
+      const bounds = new window.google.maps.LatLngBounds();
+      // bounds.extend(new window.google.maps.LatLng(center.lat, center.lng));
+      bounds.extend(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
+      map.fitBounds(bounds);
+      map.panTo(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
+    }
   };
 
   // const initSocket = () => {
@@ -132,7 +156,7 @@ function Trips(props) {
   //   // });
   //   // this.setState({ socket });
   // };
-  // useEffect(() => {
+  // useEffect(() => {image
   //   // client.onopen = ()=>{
   //   //   console.log('Hello')
   //   // }
@@ -166,11 +190,22 @@ function Trips(props) {
       // });
       // console.log(res);
       //  setAllBikez(res.data.data);
+      // getCenter();
     };
+    ridersUnderCompanyK();
 
     const intervalId = setInterval(fetchData, 3000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [map]);
+
+  // const getCenter = () => {
+  //   if (count < 1) {
+  //     center = {
+  //       lat: allRiders[0]?.gpsLoc[1],
+  //       lng: allRiders[0]?.gpsLoc[0],
+  //     };
+  //   }
+  // };
 
   const history = useNavigate();
 
@@ -253,20 +288,8 @@ function Trips(props) {
     setDuration(result.routes[0].legs[0].duration.text);
   };
 
- const getLocationData = (e) => {
-  // setDestination({ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] });
-  if (map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    bounds.extend(new window.google.maps.LatLng(center.lat, center.lng));
-    bounds.extend(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
-    map.fitBounds(bounds);
-    map.panTo(new window.google.maps.LatLng(e?.gpsLoc[1], e?.gpsLoc[0]));
-  }
-};
-
   //eslint-disable-next-line no-undef
 
- 
   const labelStyle = {
     // text: "Bike",
     color: "white",
@@ -297,8 +320,8 @@ function Trips(props) {
     // url:'https://www.nicepng.com/png/detail/365-3652928_directions-bike-comments-google-maps-bike-icon.png',
     // url: "https://th.bing.com/th/id/OIP.8JlkdXud5SNpohxO8I8n9AHaHa?pid=ImgDet&w=512&h=512&rs=1",
     // url:'https://toppng.com/public/uploads/preview/motorcycle-sports-bike-icon-115629692461s5jwedks2.png',
-    url: "https://www.nicepng.com/png/detail/350-3501141_motorcycle-free-icon-motorcycle.png",
-    scaledSize: new window.google.maps.Size(30, 30),
+    url: markerImage,
+    scaledSize: new window.google.maps.Size(60, 60),
   };
   const containerStyle = {
     width: "100%",
@@ -335,21 +358,22 @@ function Trips(props) {
 
             <p>Online {allRiders?.map((e) => e.isAvailable)?.length}</p>
           </div>
-        
         </div>
       </div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
-        zoom={zoom}
+        zoom={50}
         options={{
           zoomControl: false,
           streetViewControl: false,
           mapTypeControl: false,
           fullscreenControl: false,
         }}
-        onLoad={(map) => setTimeout(() => setMap(map))}
-       
+        onLoad={(map) => {
+          
+          setTimeout(() => {setMap(map)});
+        }}
       >
         {map && (
           <div>
@@ -364,7 +388,6 @@ function Trips(props) {
                           onClick={() => {
                             getLocationData(e);
                           }}
-                         
                           icon={bikeIcon}
                           position={{ lat: e?.gpsLoc[1], lng: e?.gpsLoc[0] }}
                           label={{
@@ -378,8 +401,6 @@ function Trips(props) {
                   </div>
                 )
             )}
-
-           
           </div>
         )}
         {directionResponse && (
