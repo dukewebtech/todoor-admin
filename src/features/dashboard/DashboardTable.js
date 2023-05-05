@@ -169,11 +169,11 @@ function Trips({ riders }) {
     
     ?.map(function (e, idx) {
       return {
-        pickUpAddress: (e?.riderId.fname),
+        pickUpAddress: (e?.riderId?.fname),
         destAddress: e?.pickUpAddress,
         rider: e?.destAddress,
-        riderId: e.tripAmt,
-        riderInfo: e.riderId,
+        riderId: e?.tripAmt,
+        riderInfo: e?.riderId,
         tripRequestStatus: moment(e?.requestTime)?.format("ll"),
         tripAmt: e?.tripRequestStatus,
       };

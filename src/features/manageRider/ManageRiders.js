@@ -129,6 +129,8 @@ function ManageRiders(props) {
     phoneNo: e?.phoneNo,
     status: e?.currTripState,
     userId: e?._id,
+    verified:e?.verified,
+    info:e
   }));
 
   console.log(allRiders);
@@ -298,6 +300,8 @@ function ManageRiders(props) {
           deleteBikes={deleteBikes}
           tableArray={e}
           key={idx}
+          info={e.info}
+          getBikes={getBikes}
         />
       ))}
       <nav className="flex justify-center mt-5">

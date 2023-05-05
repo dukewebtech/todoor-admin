@@ -85,30 +85,47 @@ handleShow, companyId}) {
 
 
 
- console.log(companyDetails._id)
+ console.log(companyDetails?.verified);
  
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
 
+   
+
   return (
     <div className="">
       <Card
         className=" text-black text-center relative"
-        sx={{ width: 300, minHeight: 120, backgroundColor: "#EBEBEB" }}
+        sx={{
+          width: 300,
+          minHeight: 120,
+          backgroundColor: companyDetails?.verified ? "#EBEBEB" : "#FFCD0061",
+        }}
       >
         <CardContent className="">
           <div
             onClick={() => {
-              handleShow();
+              handleShow(companyDetails?.verified);
             }}
             className="flex pb-2 items-start  cursor-pointer"
-            style={{ backGroundColor: "#EBEBEB" }}
+            style={{
+              backGroundColor: companyDetails?.verified
+                ? "#EBEBEB"
+                : "#FFCD0061",
+            }}
           >
-            <Avatar sx={{ width: 70, height: 70 }} src={companyDetails?.profileUrl} />
+            <Avatar
+              sx={{ width: 70, height: 70 }}
+              src={companyDetails?.profileUrl}
+            />
             <div
               className="ml-2 text-left"
-              style={{ backGroundColor: "#EBEBEB" }}
+              style={{
+                backGroundColor: companyDetails?.verified
+                  ? "#EBEBEB"
+                  : "#FFCD0061",
+              }}
             >
               <Typography className="font-bold" variant="h6">
                 {companyDetails?.fname || "-"}
@@ -122,7 +139,13 @@ handleShow, companyId}) {
             </div>
           </div>
 
-          {/* <Divider /> */}
+          <Divider className="mb-2" />
+          <Typography
+            style={{ color: companyDetails?.verified ? 'green':'red'}}
+            className="font-bold text-base italic"
+          >
+            {companyDetails?.verified ? "Verified" : "Pending Verification"}
+          </Typography>
         </CardContent>
 
         {/* <Button size="small">Learn More</Button> */}

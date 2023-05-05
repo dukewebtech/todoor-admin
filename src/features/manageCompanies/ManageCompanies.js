@@ -29,12 +29,15 @@ import trustedBy3 from "images/Rectangle 106.png";
 import {
   Autocomplete,
   Avatar,
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Divider,
   Input,
   MenuItem,
+  Modal,
   Rating,
   Select,
   TextField,
@@ -58,11 +61,32 @@ function ManageCompanies(props) {
   const [companyEarns, setCompanyEarns] = useState([]);
   const [companyNames, setCompanyName] = useState("");
   const [companyImage, setCompanyImage] = useState("");
-  const handleShow = (event) => {
-    setShow(!show);
-    // console.log("john");
+  const [user, setUser] = useState();
+  const [count, setcount] = useState(0);
+  const [opens, setOpens] = React.useState(false);
+
+  const handleShow = (verified) => {
+    if (verified) {
+      setShow(!show);
+    } else {
+      setOpens(true);
+    }
+    // console.log("jo(truehn");
   };
   const history = useNavigate();
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    minHeight: "520px",
+    bgcolor: "background.paper",
+    borderRadius: "3%",
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   const redirect = () => {
     history("/complete-signUp");
@@ -149,6 +173,7 @@ function ManageCompanies(props) {
   // }
   const getAllCompanyQueryResult = UserApi.useGetAllQuery({
     userType: "company",
+    count: count,
   });
   const totalCompanies = getAllCompanyQueryResult?.data?.data;
   console.log(totalCompanies);
@@ -175,34 +200,55 @@ function ManageCompanies(props) {
       auth: true,
     });
     console.log(res?.data?.data);
-    return (res?.data?.data?.length);
+    return res?.data?.data?.length;
   };
-function numberWithCommas(x) {
-  // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //  formState.target_amount=cleanupNumber(serPrice.value)
-  return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+  function numberWithCommas(x) {
+    // serPrice.value = x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    //  formState.target_amount=cleanupNumber(serPrice.value)
+    return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   const companyEarnings = async (companyId) => {
     const res = await get({
       endpoint: `api/super-admin/companyTotalEarningStats?userId=${companyId}`,
       //  body: { ...payload },
       auth: true,
     });
-    setCompanyEarns(res?.data?.data[0]?.total_revenue);
+    setCompanyEarns(res?.data?.data[0]?.total_revenue || 0);
     // setCompanyEarns(res.data.data);
   };
 
-  const filterRidersTable = (val)=>{
+  const filterRidersTable = (val) => {
     // console.log("Samson"?.includes(val));
     // console.log(companyRiders);
-    console.log(val)
+    console.log(val);
     let temp = companyRiders?.filter((e) =>
       e?.fname.toLowerCase()?.includes(val?.toLowerCase())
     );
-    setTempCompanyRiders(temp)
-  }
+    setTempCompanyRiders(temp);
+  };
 
- 
+  const approveDecline = async (status, companyId) => {
+    const res = status
+      ? await put({
+          endpoint: `api/super-admin/approveUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        })
+      : await put({
+          endpoint: `api/super-admin/rejectUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        });
+
+    if (res.data.success) {
+      setcount(count + 1);
+      enqueueSnackbar(res?.data?.message, { variant: "succes" });
+
+    } else {
+      console.log(res)
+      enqueueSnackbar(res?.data?.message, { variant: "error" });
+    }
+  };
 
   return (
     <div>
@@ -216,7 +262,8 @@ function numberWithCommas(x) {
                   ridersUnderCompany(e?._id);
                   companyEarnings(e?._id);
                   setCompanyName(e?.fname);
-                  setCompanyImage(e?.profileUrl)
+                  setCompanyImage(e?.profileUrl);
+                  setUser(e);
                 }}
                 className="w-[32%] mt-3"
               >
@@ -309,6 +356,91 @@ function numberWithCommas(x) {
           ))}
         </div>
       )}
+
+      <Modal
+        // open={true}
+        open={opens}
+        onClose={() => setOpens(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div>
+          <Box sx={style}>
+            <div>
+              <div className="flex gap-8">
+                <div className="flex">
+                  <Avatar
+                    sx={{ width: 100, height: 100 }}
+                    src={user?.profileUrl}
+                  />
+                </div>
+                <div className="mt-4">
+                  <Typography className="font-bold mb-5" variant="h5">
+                    {user?.fname}
+                  </Typography>
+                  <div class="flex gap-5">
+                    <Button
+                      onClick={() => approveDecline(true, user?._id)}
+                      className="bg-green-500"
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      onClick={() => approveDecline(false, user?._id)}
+                      className="bg-red-500"
+                    >
+                      Decline
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <Divider className="my-8" />
+              <div class="flex gap-20">
+                <div className=" gap-16 font-semibold">
+                  <Typography className="my-3 font-semibold">
+                    Total Earnings
+                  </Typography>
+                  <Typography className="font-semibold text-primary-main">
+                    {" "}
+                    XXXXXXX
+                  </Typography>
+                </div>
+                <div className=" font-semibold">
+                  <Typography className="my-3 font-semibold">
+                    No Of Rides
+                  </Typography>
+                  <Typography className="font-semibold text-primary-main">
+                    XXXXX
+                  </Typography>
+                </div>
+              </div>
+              <Divider className="my-8" />
+              <div class="flex gap-16 ">
+                <div className="flex flex-col gap-3 font-semibold">
+                  <Typography className="font-semibold">Address:</Typography>
+                  <Typography className="font-semibold">
+                    Phone Number:
+                  </Typography>
+                  <Typography className="font-semibold">
+                    Email address:
+                  </Typography>
+                  <Typography className="font-semibold">ID Card:</Typography>
+                  <Typography className="font-semibold">
+                    Last Login Image
+                  </Typography>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Typography>{user?.city}</Typography>
+                  <Typography>{user?.phoneNo}</Typography>
+                  <Typography>{user?.email}</Typography>
+                  <Typography>{"****"}</Typography>
+                  <Typography>{"***"}</Typography>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </div>
+      </Modal>
     </div>
   );
 }

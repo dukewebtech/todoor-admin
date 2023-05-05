@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserApi from "apis/UserApi";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSnackbar } from "notistack";
 // import { Button, TextField, Typography } from "@mui/material";
-import Modal from "common/Modal";
+import Modals from "common/Modal";
 import { getTextFieldFormikProps } from "utils/FormikUtils";
 import { post, get, put } from "services/fetch";
 
@@ -35,12 +35,15 @@ import trustedBy3 from "images/Rectangle 106.png";
 // import trustedBy4 from './images/trustedBy-4.png'
 import {
   Avatar,
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Divider,
   Input,
   MenuItem,
+  Modal,
   Rating,
   Select,
   TextField,
@@ -55,6 +58,12 @@ function ManageCompaniesTable(props) {
   const [closeModal, setCloseModal] = React.useState("");
   const [show, setShow] = React.useState("");
   const [deleteId, setDeleteId] = React.useState("");
+  const [user, setUser] = useState();
+  const [count, setcount] = useState(0);
+  const [opens, setOpens] = React.useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
   // const handleChange = (event) => {
   //   setAge(event.target.value);
   //   console.log(event)
@@ -65,13 +74,27 @@ function ManageCompaniesTable(props) {
   //    console.log(compName);
   //    return compName;
   //  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "50%",
+    minHeight: "520px",
+    bgcolor: "background.paper",
+    borderRadius: "3%",
+    // border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
   const history = useNavigate();
-  console.log(props)
+  console.log(props);
 
   const openModal = (bol, id) => {
     setCloseModal(!closeModal);
     setSuspend(bol);
-    setDeleteId(id)
+    setDeleteId(id);
   };
 
   const redirect = () => {
@@ -110,10 +133,36 @@ function ManageCompaniesTable(props) {
   //   //  setCompanyEarns(res.data.data);
   // };
 
-
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
+  const approveDecline = async (status, companyId) => {
+    const res = status
+      ? await put({
+          endpoint: `api/super-admin/approveUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        })
+      : await put({
+          endpoint: `api/super-admin/rejectUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        });
+
+    if (res.data.success) {
+      props?.getBikes();
+      enqueueSnackbar(res?.data?.message, { variant: "succes" });
+    } else {
+      console.log(res);
+      enqueueSnackbar(res?.data?.message, { variant: "error" });
+      props?.getBikes();
+
+    }
+  };
+
+  useEffect(() => {
+    setUser(props?.info);
+  }, [props?.tableArray]);
 
   return (
     <div>
@@ -122,7 +171,11 @@ function ManageCompaniesTable(props) {
         <div
           onClick={openBelow}
           style={{ border: "1px solid #DADADA" }}
-          className=" cursor-pointer mt-2 px-2 w-full flex border2 background-table min-h-[50%]"
+          className={
+            props?.tableArray?.verified
+              ? " cursor-pointer mt-2 px-2 w-full flex border2 background-table min-h-[50%]"
+              : " cursor-pointer mt-2 px-2 w-full flex border2 bg-[#FFCD0061] min-h-[50%]"
+          }
         >
           <div className="w-[20%] py-3  flex gap-2">
             <Avatar
@@ -198,14 +251,17 @@ function ManageCompaniesTable(props) {
         {show && (
           <div className="w-full flex justify-between background-table p-6">
             <div>
-              <Button
+            {!props.tableArray.verified &&  <Button
+                onClick={() => {
+                  setOpens(true);
+                }}
                 color="primary"
                 // style={{ backgroundColor: "#20B553" }}
                 className="px-6 min-w-[110px] ml-2"
-                startIcon={<TbMessage2 />}
+                // startIcon={<TbMessage2 />}
               >
-                Message
-              </Button>
+                View Details
+              </Button>}
               <Button
                 startIcon={<TbPhoneCall />}
                 style={{ backgroundColor: "#F7742B" }}
@@ -234,7 +290,7 @@ function ManageCompaniesTable(props) {
             </div>
           </div>
         )}
-        <Modal
+        <Modals
           suspend={suspend}
           deleteId={deleteId}
           openModal={openModal}
@@ -244,6 +300,91 @@ function ManageCompaniesTable(props) {
         />
       </div>
       {/* )} */}
+
+      <Modal
+        // open={true}
+        open={opens}
+        onClose={() => setOpens(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div>
+          <Box sx={style}>
+            <div>
+              <div className="flex gap-8">
+                <div className="flex">
+                  <Avatar
+                    sx={{ width: 100, height: 100 }}
+                    src={user?.profileUrl}
+                  />
+                </div>
+                <div className="mt-4">
+                  <Typography className="font-bold mb-5" variant="h5">
+                    {user?.fname}
+                  </Typography>
+                  <div class="flex gap-5">
+                    <Button
+                      onClick={() => approveDecline(true, user?._id)}
+                      className="bg-green-500"
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      onClick={() => approveDecline(false, user?._id)}
+                      className="bg-red-500"
+                    >
+                      Decline
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <Divider className="my-8" />
+              <div class="flex gap-20">
+                <div className=" gap-16 font-semibold">
+                  <Typography className="my-3 font-semibold">
+                    Total Earnings
+                  </Typography>
+                  <Typography className="font-semibold text-primary-main">
+                    {" "}
+                    XXXXXXX
+                  </Typography>
+                </div>
+                <div className=" font-semibold">
+                  <Typography className="my-3 font-semibold">
+                    No Of Rides
+                  </Typography>
+                  <Typography className="font-semibold text-primary-main">
+                    XXXXX
+                  </Typography>
+                </div>
+              </div>
+              <Divider className="my-8" />
+              <div class="flex gap-16 ">
+                <div className="flex flex-col gap-3 font-semibold">
+                  <Typography className="font-semibold">Address:</Typography>
+                  <Typography className="font-semibold">
+                    Phone Number:
+                  </Typography>
+                  <Typography className="font-semibold">
+                    Email address:
+                  </Typography>
+                  <Typography className="font-semibold">ID Card:</Typography>
+                  <Typography className="font-semibold">
+                    Last Login Image
+                  </Typography>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <Typography>{user?.city}</Typography>
+                  <Typography>{user?.phoneNo}</Typography>
+                  <Typography>{user?.email}</Typography>
+                  <Typography>{"****"}</Typography>
+                  <Typography>{"***"}</Typography>
+                </div>
+              </div>
+            </div>
+          </Box>
+        </div>
+      </Modal>
     </div>
   );
 }
