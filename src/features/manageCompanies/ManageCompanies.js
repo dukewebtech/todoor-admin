@@ -12,6 +12,7 @@ import { RouteEnum } from "constants/RouteConstants";
 import LoginHeader from "common/LoginHeader";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import pdf from "images/pdf.png";
 import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
 import { post, get, put } from "services/fetch";
@@ -54,6 +55,11 @@ import { useDispatch } from "react-redux";
 import moment from "moment";
 
 function ManageCompanies(props) {
+
+  const getCompanyStatisticsQueryResult = UserApi.useGetCompanyStatisticsQuery(
+    {}
+  );
+  const companyStatistics = getCompanyStatisticsQueryResult?.data;
   // const dispatch = useDispatch
   const [show, setShow] = useState(false);
   const [companyRiders, setCompanyRiders] = useState([]);
@@ -249,12 +255,32 @@ function ManageCompanies(props) {
       enqueueSnackbar(res?.data?.message, { variant: "error" });
     }
   };
+  
 
   return (
     <div>
       <ToDoorSearch />
+
       {!show && (
         <div className="">
+          <div class="w-2/5 mb-8">
+            <div className="flex items-center  mt-8 border2 p-2">
+              <NewWallCards
+                dashboard={true}
+                small={true}
+                bigspace={true}
+                name="Verified Companies"
+                count={companyStatistics?.total_company}
+              />
+              <NewWallCards
+                dashboard={true}
+                small={true}
+                cutborder={true}
+                name="Unverified Companies"
+                count={numberWithCommas(companyStatistics?.unverified_company)}
+              />
+            </div>
+          </div>
           <div class="flex flex-wrap gap-4">
             {totalCompanies?.map((e) => (
               <div
@@ -435,6 +461,36 @@ function ManageCompanies(props) {
                   <Typography>{user?.email}</Typography>
                   <Typography>{"****"}</Typography>
                   <Typography>{"***"}</Typography>
+                </div>
+              </div>
+              <div class="flex gap-6 mt-4">
+                <div>
+                  <Typography className="font-semibold">ID:</Typography>
+                  {user?.idPhotoUrl?.endsWith(".pdf") ? (
+                    <a href={user?.idPhotoUrl} target="_blank">
+                      <img className="w-full h-32  border-blue-300" src={pdf} />
+                    </a>
+                  ) : (
+                    <img
+                      className="w-[300px] h-32  border-blue-300"
+                      src={user?.idPhotoUrl}
+                    />
+                  )}
+                </div>
+                <div>
+                  <Typography className="font-semibold">
+                    CAC Document:
+                  </Typography>
+                  {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img className="w-full h-32 border-blue-300" src={pdf} />
+                    </a>
+                  ) : (
+                    <img
+                      className="w-[300px] h-32  border-blue-300"
+                      src={user?.companyRegistrationPhotoUrl}
+                    />
+                  )}
                 </div>
               </div>
             </div>

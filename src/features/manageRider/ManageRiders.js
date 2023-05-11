@@ -58,6 +58,10 @@ function ManageRiders(props) {
   const getAllCompanyQueryResult = UserApi.useGetAllQuery({
     userType: "company",
   });
+  const getCompanyStatisticsQueryResult = UserApi.useGetCompanyStatisticsQuery(
+    {}
+  );
+  const companyStatistics = getCompanyStatisticsQueryResult?.data;
   const totalCompanies = getAllCompanyQueryResult?.data?.data;
 
   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
@@ -206,7 +210,7 @@ function ManageRiders(props) {
             big={true}
             green={true}
             name="Total Riders"
-            count={allBikez?.length * totalPages}
+            count={companyStatistics?.total_riders}
           />
         </div>
         <div>
@@ -236,11 +240,15 @@ function ManageRiders(props) {
             <div className="">
               <WallCards
                 short={true}
-                name="Active"
-                count={allBikez?.length - 1}
+                name="Verified"
+                count={companyStatistics?.verified_rider}
               />
             </div>
-            <WallCards short={true} name="Non-Active" count={"1"} />
+            <WallCards
+              short={true}
+              name="Un-Verified"
+              count={companyStatistics?.unverified_rider}
+            />
           </div>
         </div>
 
