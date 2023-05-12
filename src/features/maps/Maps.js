@@ -292,7 +292,7 @@ function Trips(props) {
 
   const labelStyle = {
     // text: "Bike",
-    color: "white",
+    color: "blue",
     fontSize: "12px",
     fontWeight: "bold",
     anchor: new window.google.maps.Point(0, 20),

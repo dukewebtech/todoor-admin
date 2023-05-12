@@ -522,9 +522,14 @@ function ManageCompanies(props) {
             <ManageCompaniesTable tableArray={e} />
           ))}
 
-         { tabloid.length < 1 &&<Typography variant="h4" className="font-bold my-16 text-primary-main w-full text-center">
-           This company is yet to add a Rider
-          </Typography>}
+          {tabloid.length < 1 && (
+            <Typography
+              variant="h4"
+              className="font-bold my-16 text-primary-main w-full text-center"
+            >
+              This company is yet to add a Rider
+            </Typography>
+          )}
         </div>
       )}
 
@@ -568,7 +573,7 @@ function ManageCompanies(props) {
                 </div>
               </div>
               <Divider className="my-8" />
-              <div class="flex gap-20">
+              {/* <div class="flex gap-20">
                 <div className=" gap-16 font-semibold">
                   <Typography className="my-3 font-semibold">
                     Total Earnings
@@ -587,7 +592,7 @@ function ManageCompanies(props) {
                   </Typography>
                 </div>
               </div>
-              <Divider className="my-8" />
+              <Divider className="my-8" /> */}
               <div class="flex gap-16 ">
                 <div className="flex flex-col gap-3 font-semibold">
                   <Typography className="font-semibold">Address:</Typography>
@@ -604,10 +609,27 @@ function ManageCompanies(props) {
                   <Typography>{user?.email}</Typography>
                 </div>
               </div>
-              <div class="flex gap-6 mt-4">
-                <div>
+              <div class="flex flex-col gap-4 mt-4 w-1/2">
+                <div className="grid grid-cols-2 gap-5 items-center">
                   <Typography className="font-semibold">ID:</Typography>
-                  {user?.idPhotoUrl?.endsWith(".pdf") ? (
+                  {!user?.idPhotoUrl ? (
+                    <div className="w-full flex flex-col justify-start items-start gap-5">
+                      <Typography className="text-yellow-400" variant="">
+                        Not Yet Uploaded.
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Button
+                      className="text-white italic bg-primary-main"
+                      variant=""
+                    >
+                      <a href={user?.idPhotoUrl} target="_blank">
+                        {" "}
+                        View Id.
+                      </a>
+                    </Button>
+                  )}
+                  {/* {user?.idPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.idPhotoUrl} target="_blank">
                       <img className="w-full h-32  border-none" src={pdf} />
                     </a>
@@ -617,14 +639,14 @@ function ManageCompanies(props) {
                         className="w-[300px] h-32  border-none"
                         src={user?.idPhotoUrl}
                       />
-                    </a>
-                  )}
+                    </a> 
+                  )}*/}
                 </div>
-                <div>
-                  <Typography className="font-semibold">
+                <div className="grid grid-cols-2 gap-5 items-center">
+                  <Typography className="font-semibold ">
                     CAC Document:
                   </Typography>
-                  {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
+                  {/* {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.companyRegistrationPhotoUrl} target="_blank">
                       <img className="w-full h-32 border-none" src={pdf} />
                     </a>
@@ -635,6 +657,25 @@ function ManageCompanies(props) {
                         src={user?.companyRegistrationPhotoUrl}
                       />
                     </a>
+                  )} */}
+                  {!user?.companyRegistrationPhotoUrl ? (
+                    <div className="w-full flex flex-col justify-start items-start gap-5">
+                      <Typography className="text-yellow-400" variant="">
+                        Not Yet Uploaded.
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Button
+                      className="text-white italic bg-primary-main minw-"
+                      variant=""
+                    >
+                      <a
+                        href={user?.companyRegistrationPhotoUrl}
+                        target="_blank"
+                      >
+                        View CAC
+                      </a>
+                    </Button>
                   )}
                 </div>
               </div>

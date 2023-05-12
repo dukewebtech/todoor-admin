@@ -216,9 +216,21 @@ function ManageCompaniesTable(props) {
             </Typography>
           </div>
           <div className="w-[15%]   p-3 ">
-            <p className="medium-size">Trips Completed</p>
-            <Typography variant="" class="text-sm">
-              {props?.tableArray?.tripsCompleted}
+            <p className="medium-size">Status</p>
+            <Typography className="text-[11px]" variant="" class="text-sm">
+              {props?.tableArray?.info?.verified
+                ? "Verified"
+                : !props?.tableArray?.info?.verified &&
+                  !props?.tableArray?.info?.companyRegistrationPhotoUrl &&
+                  !props?.tableArray?.info?.idPhotoUrl
+                ? "No Document Uploaded"
+                : !props?.tableArray?.info?.verified &&
+                  !props?.tableArray?.info?.idPhotoUrl
+                ? "ID Not uploaded"
+                : !props?.tableArray?.info?.verified &&
+                  !props?.tableArray?.info?.companyRegistrationPhotoUrl
+                ? "CAC not uploaded"
+                : "Pending Verification"}
             </Typography>
           </div>
           {/* <div className="w-full  p-3 ">
@@ -331,6 +343,7 @@ function ManageCompaniesTable(props) {
                   {!user?.verified && (
                     <div class="flex gap-5">
                       <Button
+                        disabled={!user?.idPhotoUrl || !user?.companyRegistrationPhotoUrl}
                         onClick={() => approveDecline(true, user?._id)}
                         className="bg-green-500"
                       >
@@ -347,7 +360,7 @@ function ManageCompaniesTable(props) {
                 </div>
               </div>
               <Divider className="my-8" />
-              <div class="flex gap-20">
+              {/* <div class="flex gap-20">
                 <div className=" gap-16 font-semibold">
                   <Typography className="my-3 font-semibold">
                     Total Earnings
@@ -366,7 +379,7 @@ function ManageCompaniesTable(props) {
                   </Typography>
                 </div>
               </div>
-              <Divider className="my-8" />
+              <Divider className="my-8" /> */}
               <div class="flex gap-16 ">
                 <div className="flex flex-col gap-3 font-semibold">
                   <Typography className="font-semibold">Address:</Typography>
@@ -376,51 +389,86 @@ function ManageCompaniesTable(props) {
                   <Typography className="font-semibold">
                     Email address:
                   </Typography>
-                  <Typography className="font-semibold">ID Card:</Typography>
+                  {/* <Typography className="font-semibold">ID Card:</Typography>
                   <Typography className="font-semibold">
                     Last Login Image
-                  </Typography>
+                  </Typography> */}
                 </div>
                 <div className="flex flex-col gap-3">
                   <Typography>{user?.city}</Typography>
                   <Typography>{user?.phoneNo}</Typography>
                   <Typography>{user?.email}</Typography>
-                  <Typography>{"****"}</Typography>
-                  <Typography>{"***"}</Typography>
+                  {/* <Typography>{"****"}</Typography>
+                  <Typography>{"***"}</Typography> */}
                 </div>
               </div>
-          
-              <div class="flex gap-6 mt-4">
-                <div>
+              <div class="flex flex-col gap-4 mt-4 w-1/2">
+                <div className="grid grid-cols-2 gap-5 items-center">
                   <Typography className="font-semibold">ID:</Typography>
-                  {user?.idPhotoUrl?.endsWith(".pdf") ? (
+                  {!user?.idPhotoUrl ? (
+                    <div className="w-full flex flex-col justify-start items-start gap-5">
+                      <Typography className="text-yellow-400" variant="">
+                        Not Yet Uploaded.
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Button
+                      className="text-white italic bg-primary-main"
+                      variant=""
+                    >
+                      <a href={user?.idPhotoUrl} target="_blank">
+                        {" "}
+                        View Id.
+                      </a>
+                    </Button>
+                  )}
+                  {/* {user?.idPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.idPhotoUrl} target="_blank">
-                      <img className="w-full h-32  " src={pdf} />
+                      <img className="w-full h-32  border-none" src={pdf} />
                     </a>
                   ) : (
                     <a href={user?.idPhotoUrl} target="_blank">
                       <img
-                        className="w-[300px] h-32  "
+                        className="w-[300px] h-32  border-none"
                         src={user?.idPhotoUrl}
                       />
-                    </a>
-                  )}
+                    </a> 
+                  )}*/}
                 </div>
-                <div>
-                  <Typography className="font-semibold">
+                <div className="grid grid-cols-2 gap-5 items-center">
+                  <Typography className="font-semibold ">
                     CAC Document:
                   </Typography>
-                  {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
+                  {/* {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.companyRegistrationPhotoUrl} target="_blank">
-                      <img className="w-full h-32 " src={pdf} />
+                      <img className="w-full h-32 border-none" src={pdf} />
                     </a>
                   ) : (
                     <a href={user?.companyRegistrationPhotoUrl} target="_blank">
                       <img
-                        className="w-[300px] h-32  "
+                        className="w-[300px] h-32  border-none"
                         src={user?.companyRegistrationPhotoUrl}
                       />
                     </a>
+                  )} */}
+                  {!user?.companyRegistrationPhotoUrl ? (
+                    <div className="w-full flex flex-col justify-start items-start gap-5">
+                      <Typography className="text-yellow-400" variant="">
+                        Not Yet Uploaded.
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Button
+                      className="text-white italic bg-primary-main minw-"
+                      variant=""
+                    >
+                      <a
+                        href={user?.companyRegistrationPhotoUrl}
+                        target="_blank"
+                      >
+                        View CAC
+                      </a>
+                    </Button>
                   )}
                 </div>
               </div>

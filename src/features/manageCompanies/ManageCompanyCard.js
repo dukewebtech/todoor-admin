@@ -16,11 +16,10 @@ import Checkbox from "@mui/material/Checkbox";
 import toDoorLogo from "images/Ellipse 30.png";
 import background from "images/background.png";
 import gigLogo from "images/Ellipse 56.png";
-import moment from 'moment'
+import moment from "moment";
 import axiosConn from "apis/ApiClient";
 import axios from "axios";
-  import { post, get, put } from "services/fetch";
-
+import { post, get, put } from "services/fetch";
 
 // import { RouteEnum } from "constants/RouteConstants";
 // import ReactDOM from 'react-dom';
@@ -44,8 +43,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function ManageCompanyCard({companyDetails,
-handleShow, companyId}) {
+function ManageCompanyCard({ companyDetails, handleShow, companyId }) {
   const [age, setAge] = React.useState("");
   // const [companyId, setCompanyId] = React.useState("636e237ced577dba2688816b");
   const handleChange = (event) => {
@@ -63,35 +61,31 @@ handleShow, companyId}) {
   const { enqueueSnackbar } = useSnackbar();
   const [loginMuation, loginMutationResult] = UserApi.useLoginMutation();
 
- const deleteRider = async () => {
-   const res = await get({
-     endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
-     //  body: { ...payload },
-     auth: true,
-   });
-   console.log(res.data.data);
-  //  setCompanyEarns(res.data.data);
- };
+  const deleteRider = async () => {
+    const res = await get({
+      endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    //  setCompanyEarns(res.data.data);
+  };
 
- const ridersUnderCompanyR = async (companyId) => {
-   const res = await get({
-     endpoint: `api/super-admin/getAllRidersCompany?userId=${companyId}`,
-     //  body: { ...payload },
-     auth: true,
-   });
-   console.log(res.data.data);
-   return res.data.data.length;
- };
+  const ridersUnderCompanyR = async (companyId) => {
+    const res = await get({
+      endpoint: `api/super-admin/getAllRidersCompany?userId=${companyId}`,
+      //  body: { ...payload },
+      auth: true,
+    });
+    console.log(res.data.data);
+    return res.data.data.length;
+  };
 
+  console.log(companyDetails?.verified);
 
-
- console.log(companyDetails?.verified);
- 
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
-
-   
 
   return (
     <div className="">
@@ -141,10 +135,21 @@ handleShow, companyId}) {
 
           <Divider className="mb-2" />
           <Typography
-            style={{ color: companyDetails?.verified ? 'green':'red'}}
+            style={{ color: companyDetails?.verified ? "green" : "red" }}
             className="font-bold text-base italic"
           >
-            {companyDetails?.verified ? "Verified" : "Pending Verification"}
+            {companyDetails?.verified
+              ? "Verified"
+              : !companyDetails?.verified &&
+                !companyDetails?.companyRegistrationPhotoUrl &&
+                !companyDetails?.idPhotoUrl
+              ? "No Document Uploaded"
+              : !companyDetails?.verified && !companyDetails?.idPhotoUrl
+              ? "ID Not uploaded"
+              : !companyDetails?.verified &&
+                !companyDetails?.companyRegistrationPhotoUrl
+              ? "CAC not uploaded"
+              : "Pending Verification"}
           </Typography>
         </CardContent>
 

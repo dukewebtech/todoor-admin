@@ -100,15 +100,15 @@ const currentUrl = location.pathname;
     //   image2: messageW,
     //   imageboolean: false,
     // },
-    {
-      name: "Support",
-      d: RouteEnum.SUPPORT,
-      image: messages,
-      image2: messagesW,
-      image2: messagesW,
-      color: false,
-      imageboolean: false,
-    },
+    // {
+    //   name: "Support",
+    //   d: RouteEnum.SUPPORT,
+    //   image: messages,
+    //   image2: messagesW,
+    //   image2: messagesW,
+    //   color: false,
+    //   imageboolean: false,
+    // },
 
     {
       name: "Settings",
