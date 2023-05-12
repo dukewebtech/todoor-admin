@@ -55,13 +55,15 @@ import { useDispatch } from "react-redux";
 import moment from "moment";
 
 function ManageCompanies(props) {
-
   const getCompanyStatisticsQueryResult = UserApi.useGetCompanyStatisticsQuery(
     {}
   );
   const companyStatistics = getCompanyStatisticsQueryResult?.data;
   // const dispatch = useDispatch
   const [show, setShow] = useState(false);
+  const [userType, setUserType] = useState("company");
+  const [mappingVal, setMappingVal] = useState([]);
+  const [mappingValCompany, setMappingValCompany] = useState([]);
   const [companyRiders, setCompanyRiders] = useState([]);
   const [tempCompanyRiders, setTempCompanyRiders] = useState([]);
   const [companyEarns, setCompanyEarns] = useState([]);
@@ -70,6 +72,7 @@ function ManageCompanies(props) {
   const [user, setUser] = useState();
   const [count, setcount] = useState(0);
   const [opens, setOpens] = React.useState(false);
+  const [pageNo, setPageNo] = useState(1);
 
   const handleShow = (verified) => {
     if (verified) {
@@ -96,6 +99,12 @@ function ManageCompanies(props) {
 
   const redirect = () => {
     history("/complete-signUp");
+  };
+
+  const onPageChange = (page) => {
+    setPageNo(page);
+
+    console.log(page);
   };
 
   //   const ridersUnderCompany = async (userId) => {
@@ -177,12 +186,39 @@ function ManageCompanies(props) {
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
+  // {{BASE_URL}}/api/company/getBothVerifiedUnverifiedUsers?userType=rider&verified=false
+
   const getAllCompanyQueryResult = UserApi.useGetAllQuery({
     userType: "company",
     count: count,
+    pageNo,
   });
   const totalCompanies = getAllCompanyQueryResult?.data?.data;
   console.log(totalCompanies);
+
+  const getAllUnVerifiedQueryResult = UserApi.useGetAllVerifiedQuery({
+    userType,
+    verified: false,
+    pageNo,
+  });
+  const getAllVerifiedQueryResult = UserApi.useGetAllVerifiedQuery({
+    userType,
+    verified: true,
+    pageNo,
+  });
+  const totalVerifiedUsers = getAllVerifiedQueryResult?.data?.data;
+  const totalUnverifiedUsers = getAllUnVerifiedQueryResult?.data?.data;
+  console.log(totalVerifiedUsers);
+
+  const totalPages = +getAllCompanyQueryResult?.data?.meta?.totalNoOfPages;
+
+  console.log(totalPages);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
+  // let mappingVal = totalCompanies;
 
   const functionHook = () => {
     //  dispatch(UserApi.useLoginMutation());
@@ -233,6 +269,27 @@ function ManageCompanies(props) {
     setTempCompanyRiders(temp);
   };
 
+  const newDisplay = async (status, companyId) => {
+    const res = status
+      ? await put({
+          endpoint: `api/super-admin/approveUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        })
+      : await put({
+          endpoint: `api/super-admin/rejectUser?id=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        });
+
+    if (res.data.success) {
+      setcount(count + 1);
+      enqueueSnackbar(res?.data?.message, { variant: "succes" });
+    } else {
+      console.log(res);
+      enqueueSnackbar(res?.data?.message, { variant: "error" });
+    }
+  };
   const approveDecline = async (status, companyId) => {
     const res = status
       ? await put({
@@ -249,13 +306,21 @@ function ManageCompanies(props) {
     if (res.data.success) {
       setcount(count + 1);
       enqueueSnackbar(res?.data?.message, { variant: "succes" });
-
     } else {
-      console.log(res)
+      console.log(res);
       enqueueSnackbar(res?.data?.message, { variant: "error" });
     }
   };
-  
+
+  const newsDisplay = (val, bol) => {
+    // console.log("Samson"?.includes(val));
+    // console.log(companyRiders);
+    console.log(val);
+    if (bol) setMappingVal(val);
+    else {
+      setMappingVal([]);
+    }
+  };
 
   return (
     <div>
@@ -263,26 +328,102 @@ function ManageCompanies(props) {
 
       {!show && (
         <div className="">
-          <div class="w-2/5 mb-8">
+          <div class="w-3/5 mb-8">
             <div className="flex items-center  mt-8 border2 p-2">
-              <NewWallCards
-                dashboard={true}
-                small={true}
-                bigspace={true}
-                name="Verified Companies"
-                count={companyStatistics?.total_company}
-              />
-              <NewWallCards
-                dashboard={true}
-                small={true}
-                cutborder={true}
-                name="Unverified Companies"
-                count={numberWithCommas(companyStatistics?.unverified_company)}
-              />
+              <div
+                className="hover:cursor-pointer"
+                onClick={() => {
+                  newsDisplay(totalVerifiedUsers, true);
+                }}
+              >
+                <NewWallCards
+                  dashboard={true}
+                  small={true}
+                  bigspace={true}
+                  name="Verified Companies"
+                  count={companyStatistics?.verified_company}
+                />
+              </div>
+              <div
+                className="hover:cursor-pointer"
+                onClick={() => {
+                  newsDisplay(totalUnverifiedUsers, true);
+                }}
+              >
+                <NewWallCards
+                  dashboard={true}
+                  small={true}
+                  cutborder={true}
+                  name="Unverified Companies"
+                  count={numberWithCommas(
+                    companyStatistics?.unverified_company
+                  )}
+                />
+              </div>
+              <div
+                className="hover:cursor-pointer"
+                onClick={() => {
+                  newsDisplay(totalCompanies, false);
+                }}
+              >
+                <NewWallCards
+                  dashboard={true}
+                  small={true}
+                  cutborder={true}
+                  name="Total Companies"
+                  count={numberWithCommas(companyStatistics?.total_company)}
+                />
+              </div>
             </div>
           </div>
+
+          <div className="flex mb-5 h-3 justify-center mt-5 ">
+            <ul className="flex">
+              {pageNo > 1 && (
+                <li>
+                  <a
+                    href="#"
+                    onClick={() => onPageChange(pageNo - 1)}
+                    className="py-2 px-4 bg-gray-400 text-white font-bold rounded-l hover:bg-gray-600"
+                  >
+                    Prev
+                  </a>
+                </li>
+              )}
+              {pageNumbers.map((number) => (
+                <li key={number}>
+                  <a
+                    href="#"
+                    onClick={() => onPageChange(number)}
+                    className={
+                      pageNo === number
+                        ? "py-2 px-4 bg-primary-main text-white font-bold"
+                        : "py-2 px-4 hover:bg-gray-400/10"
+                    }
+                  >
+                    {number}
+                  </a>
+                </li>
+              ))}
+              {pageNo < pageNumbers.length && (
+                <li>
+                  <a
+                    href="#"
+                    onClick={() => onPageChange(pageNo + 1)}
+                    className="py-2 px-4 bg-gray-400 text-white font-bold rounded-r hover:bg-gray-600"
+                  >
+                    Next
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
           <div class="flex flex-wrap gap-4">
-            {totalCompanies?.map((e) => (
+            {(
+              (mappingVal.length && mappingVal) ||
+              // (mappingValCompany.length && mappingValCompany) ||
+              totalCompanies
+            )?.map((e) => (
               <div
                 onClick={() => {
                   ridersUnderCompany(e?._id);
@@ -380,6 +521,10 @@ function ManageCompanies(props) {
           {tabloid?.map((e) => (
             <ManageCompaniesTable tableArray={e} />
           ))}
+
+         { tabloid.length < 1 &&<Typography variant="h4" className="font-bold my-16 text-primary-main w-full text-center">
+           This company is yet to add a Rider
+          </Typography>}
         </div>
       )}
 
@@ -404,20 +549,22 @@ function ManageCompanies(props) {
                   <Typography className="font-bold mb-5" variant="h5">
                     {user?.fname}
                   </Typography>
-                  <div class="flex gap-5">
-                    <Button
-                      onClick={() => approveDecline(true, user?._id)}
-                      className="bg-green-500"
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      onClick={() => approveDecline(false, user?._id)}
-                      className="bg-red-500"
-                    >
-                      Decline
-                    </Button>
-                  </div>
+                  {!user?.verified && (
+                    <div class="flex gap-5">
+                      <Button
+                        onClick={() => approveDecline(true, user?._id)}
+                        className="bg-green-500"
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        onClick={() => approveDecline(false, user?._id)}
+                        className="bg-red-500"
+                      >
+                        Decline
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               <Divider className="my-8" />
@@ -450,17 +597,11 @@ function ManageCompanies(props) {
                   <Typography className="font-semibold">
                     Email address:
                   </Typography>
-                  <Typography className="font-semibold">ID Card:</Typography>
-                  <Typography className="font-semibold">
-                    Last Login Image
-                  </Typography>
                 </div>
                 <div className="flex flex-col gap-3">
                   <Typography>{user?.city}</Typography>
                   <Typography>{user?.phoneNo}</Typography>
                   <Typography>{user?.email}</Typography>
-                  <Typography>{"****"}</Typography>
-                  <Typography>{"***"}</Typography>
                 </div>
               </div>
               <div class="flex gap-6 mt-4">
@@ -468,13 +609,15 @@ function ManageCompanies(props) {
                   <Typography className="font-semibold">ID:</Typography>
                   {user?.idPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.idPhotoUrl} target="_blank">
-                      <img className="w-full h-32  border-blue-300" src={pdf} />
+                      <img className="w-full h-32  border-none" src={pdf} />
                     </a>
                   ) : (
-                    <img
-                      className="w-[300px] h-32  border-blue-300"
-                      src={user?.idPhotoUrl}
-                    />
+                    <a href={user?.idPhotoUrl} target="_blank">
+                      <img
+                        className="w-[300px] h-32  border-none"
+                        src={user?.idPhotoUrl}
+                      />
+                    </a>
                   )}
                 </div>
                 <div>
@@ -483,13 +626,15 @@ function ManageCompanies(props) {
                   </Typography>
                   {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.companyRegistrationPhotoUrl} target="_blank">
-                      <img className="w-full h-32 border-blue-300" src={pdf} />
+                      <img className="w-full h-32 border-none" src={pdf} />
                     </a>
                   ) : (
-                    <img
-                      className="w-[300px] h-32  border-blue-300"
-                      src={user?.companyRegistrationPhotoUrl}
-                    />
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img
+                        className="w-[300px] h-32  border-none"
+                        src={user?.companyRegistrationPhotoUrl}
+                      />
+                    </a>
                   )}
                 </div>
               </div>

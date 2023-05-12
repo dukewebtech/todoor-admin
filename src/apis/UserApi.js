@@ -54,11 +54,21 @@ export const UserApi = SoftwrkApi.injectEndpoints({
 
     getAll: builder.query({
       query: (arg) => {
-        const { userType } = arg;
+        const { userType, pageNo } = arg;
         return {
           url: `${BASE_URL}/company/getalluser`,
           method: "GET",
-          params: { userType },
+          params: { userType, pageNo },
+        };
+      },
+    }),
+    getAllVerified: builder.query({
+      query: (arg) => {
+        const { userType, verified, pageNo } = arg;
+        return {
+          url: `${BASE_URL}/company/getBothVerifiedUnverifiedUsers`,
+          method: "GET",
+          params: { userType, verified },
         };
       },
     }),

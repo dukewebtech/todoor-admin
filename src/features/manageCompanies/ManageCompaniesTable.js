@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import Modals from "common/Modal";
 import { getTextFieldFormikProps } from "utils/FormikUtils";
 import { post, get, put } from "services/fetch";
+import pdf from "images/pdf.png";
 
 import { HiOutlineTrash } from "react-icons/hi";
 import { TbMessage2, TbPhoneCall } from "react-icons/tb";
@@ -136,7 +137,7 @@ function ManageCompaniesTable(props) {
   // if (authUser.accessToken) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
-  const approveDecline = async (status, companyId) => {
+  const approveDecline = async (status, companyId, message) => {
     const res = status
       ? await put({
           endpoint: `api/super-admin/approveUser?id=${companyId}`,
@@ -151,7 +152,7 @@ function ManageCompaniesTable(props) {
 
     if (res.data.success) {
       props?.getBikes();
-      enqueueSnackbar(res?.data?.message, { variant: "succes" });
+      enqueueSnackbar(message?message:res?.data?.message, { variant: "succes" });
     } else {
       console.log(res);
       enqueueSnackbar(res?.data?.message, { variant: "error" });
@@ -251,17 +252,19 @@ function ManageCompaniesTable(props) {
         {show && (
           <div className="w-full flex justify-between background-table p-6">
             <div>
-            {!props.tableArray.verified &&  <Button
-                onClick={() => {
-                  setOpens(true);
-                }}
-                color="primary"
-                // style={{ backgroundColor: "#20B553" }}
-                className="px-6 min-w-[110px] ml-2"
-                // startIcon={<TbMessage2 />}
-              >
-                View Details
-              </Button>}
+              {
+                <Button
+                  onClick={() => {
+                    setOpens(true);
+                  }}
+                  color="primary"
+                  // style={{ backgroundColor: "#20B553" }}
+                  className="px-6 min-w-[110px] ml-2"
+                  // startIcon={<TbMessage2 />}
+                >
+                  View Details
+                </Button>
+              }
               <Button
                 startIcon={<TbPhoneCall />}
                 style={{ backgroundColor: "#F7742B" }}
@@ -272,7 +275,10 @@ function ManageCompaniesTable(props) {
             </div>
             <div className="flex justify-between items-center">
               <Button
-                onClick={() => openModal(true)}
+                // onClick={() => openModal(true)}
+                onClick={() =>
+                  approveDecline(false, user?._id, "user suspended")
+                }
                 style={{ backgroundColor: "#DCDCDC", color: "black" }}
                 className="mr-2 px-6 min-w-[110px] ml-2"
               >
@@ -322,20 +328,22 @@ function ManageCompaniesTable(props) {
                   <Typography className="font-bold mb-5" variant="h5">
                     {user?.fname}
                   </Typography>
-                  <div class="flex gap-5">
-                    <Button
-                      onClick={() => approveDecline(true, user?._id)}
-                      className="bg-green-500"
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      onClick={() => approveDecline(false, user?._id)}
-                      className="bg-red-500"
-                    >
-                      Decline
-                    </Button>
-                  </div>
+                  {!user?.verified && (
+                    <div class="flex gap-5">
+                      <Button
+                        onClick={() => approveDecline(true, user?._id)}
+                        className="bg-green-500"
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        onClick={() => approveDecline(false, user?._id)}
+                        className="bg-red-500"
+                      >
+                        Decline
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               <Divider className="my-8" />
@@ -379,6 +387,41 @@ function ManageCompaniesTable(props) {
                   <Typography>{user?.email}</Typography>
                   <Typography>{"****"}</Typography>
                   <Typography>{"***"}</Typography>
+                </div>
+              </div>
+          
+              <div class="flex gap-6 mt-4">
+                <div>
+                  <Typography className="font-semibold">ID:</Typography>
+                  {user?.idPhotoUrl?.endsWith(".pdf") ? (
+                    <a href={user?.idPhotoUrl} target="_blank">
+                      <img className="w-full h-32  " src={pdf} />
+                    </a>
+                  ) : (
+                    <a href={user?.idPhotoUrl} target="_blank">
+                      <img
+                        className="w-[300px] h-32  "
+                        src={user?.idPhotoUrl}
+                      />
+                    </a>
+                  )}
+                </div>
+                <div>
+                  <Typography className="font-semibold">
+                    CAC Document:
+                  </Typography>
+                  {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img className="w-full h-32 " src={pdf} />
+                    </a>
+                  ) : (
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img
+                        className="w-[300px] h-32  "
+                        src={user?.companyRegistrationPhotoUrl}
+                      />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

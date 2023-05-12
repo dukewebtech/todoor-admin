@@ -128,28 +128,28 @@ console.log(companyStatistics);
             dashboard={true}
             green={true}
             name="Total Companies"
-            count={companyStatistics && companyStatistics?.total_company}
+            count={companyStatistics && companyStatistics?.total_company|| 0}
           />
         </div>
         <div className="mr-3">
           <WallCards
             dashboard={true}
             name="Total Riders"
-            count={companyStatistics && companyStatistics?.total_riders}
+            count={companyStatistics && companyStatistics?.total_riders|| 0}
           />
         </div>
         <div className="mr-3">
           <WallCards
             dashboard={true}
             name="Rides in progress"
-            count={companyStatistics && companyStatistics?.rider_in_progress}
+            count={companyStatistics && companyStatistics?.rider_in_progress|| 0}
           />
         </div>
         <div className="mr-3">
           <WallCards
             dashboard={true}
             name="Users"
-            count={companyStatistics && companyStatistics?.active_bikes}
+            count={companyStatistics && companyStatistics?.active_bikes|| 0}
           />
         </div>
         <div className="relative w-full">
@@ -170,7 +170,7 @@ console.log(companyStatistics);
             small={true}
             name="Earnings"
             count={numberWithCommas(
-              companyStatistics && companyStatistics?.total_earnings?.toFixed(2)
+              companyStatistics && companyStatistics?.total_earnings?.toFixed(2) || 0
             )}
           />
         </div>

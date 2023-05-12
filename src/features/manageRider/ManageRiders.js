@@ -52,6 +52,7 @@ import moment from "moment";
 import { del, get, post } from "services/fetch";
 function ManageRiders(props) {
   const history = useNavigate();
+  const [userType, setUserType] = useState("rider");
   const [pageNo, setPageNo] = useState(1);
   const [allBikez, setAllBikez] = useState([]);
 
@@ -61,63 +62,74 @@ function ManageRiders(props) {
   const getCompanyStatisticsQueryResult = UserApi.useGetCompanyStatisticsQuery(
     {}
   );
+  const [mappingVal, setMappingVal] = useState([]);
+
   const companyStatistics = getCompanyStatisticsQueryResult?.data;
   const totalCompanies = getAllCompanyQueryResult?.data?.data;
 
   const getAllRIderQueryResult = UserApi.useGetAllQuery({ userType: "rider" });
   const totalRiders = getAllRIderQueryResult?.data?.data;
 
-   const getAllBikesQueryResult = UserApi?.useGetAllBikesQuery({ pageNo });
-   const totalPages = +getAllRIderQueryResult?.data?.meta?.totalNoOfPages;
-   const bikers = getAllBikesQueryResult?.data?.data;
+  const getAllBikesQueryResult = UserApi?.useGetAllBikesQuery({ pageNo });
+  const totalPages = +getAllRIderQueryResult?.data?.meta?.totalNoOfPages;
+  const bikers = getAllBikesQueryResult?.data?.data;
 
-   const onPageChange = (page) => {
-     setPageNo(page);
+  const getAllUnVerifiedQueryResult = UserApi.useGetAllVerifiedQuery({
+    userType,
+    verified: false,
+    pageNo,
+  });
+  const getAllVerifiedQueryResult = UserApi.useGetAllVerifiedQuery({
+    userType,
+    verified: true,
+    pageNo,
+  });
+  const totalVerifiedUsers = getAllVerifiedQueryResult?.data?.data;
+  const totalUnverifiedUsers = getAllUnVerifiedQueryResult?.data?.data;
 
-     console.log(page);
-   };
+  const onPageChange = (page) => {
+    setPageNo(page);
 
-    useEffect(() => {
-      getBikes();
-    }, [pageNo]);
+    console.log(page);
+  };
 
-    const getBikes = async () => {
-      const res = await get({
-        endpoint: `api/company/getalluser?userType=rider&pageNo=${pageNo}`,
-        auth: true,
-      });
-      setAllBikez(
-        res?.data?.data
-      );
+  useEffect(() => {
+    getBikes();
+  }, [pageNo]);
 
-      console.log(res.data.data)
-    };
+  const getBikes = async () => {
+    const res = await get({
+      endpoint: `api/company/getalluser?userType=rider&pageNo=${pageNo}`,
+      auth: true,
+    });
+    setAllBikez(res?.data?.data);
 
-    const deleteBikes = async (id) => {
-      const res = await del({
-        endpoint: `api/super-admin/deleteRider?userId=${id}`,
-        auth: true,
-      });
-     getBikes()
-    };
+    console.log(res.data.data);
+  };
 
-   const pageNumbers = [];
-   for (let i = 1; i <= totalPages; i++) {
-     pageNumbers.push(i);
-   }
+  const deleteBikes = async (id) => {
+    const res = await del({
+      endpoint: `api/super-admin/deleteRider?userId=${id}`,
+      auth: true,
+    });
+    getBikes();
+  };
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   const redirect = () => {
     history("/complete-signUp");
   };
 
   const getCompanyName = (id) => {
-    if(totalCompanies && allBikez && id){
- let compName = totalCompanies.find((e) => e._id == id);
- console.log(compName?.fname);
-    return compName
-
+    if (totalCompanies && allBikez && id) {
+      let compName = totalCompanies.find((e) => e._id == id);
+      console.log(compName?.fname);
+      return compName;
     }
-   
   };
 
   const allRiders = allBikez?.map((e) => ({
@@ -133,8 +145,8 @@ function ManageRiders(props) {
     phoneNo: e?.phoneNo,
     status: e?.currTripState,
     userId: e?._id,
-    verified:e?.verified,
-    info:e
+    verified: e?.verified,
+    info: e,
   }));
 
   console.log(allRiders);
@@ -193,6 +205,34 @@ function ManageRiders(props) {
   //   return <Navigate to={RouteEnum.HOME} />;
   // }
 
+  const newsDisplay = (val, bol) => {
+    // console.log("Samson"?.includes(val));
+    // console.log(companyRiders);
+    console.log(val);
+    if (bol)
+      setMappingVal(
+        val?.map((e) => ({
+          image: e?.profileUrl,
+          name: `${e?.fname}`,
+          company: e?.companyId
+            ? getCompanyName(e?.companyId)?.fname
+            : "Self Registered",
+          id: e?.email,
+          // ratings: e.userRating && e.userRating !== 0 ? e.userRating : "4",
+          ratings: moment(e?.created_at).format("ll"),
+          tripsCompleted: "-",
+          phoneNo: e?.phoneNo,
+          status: e?.currTripState,
+          userId: e?._id,
+          verified: e?.verified,
+          info: e,
+        }))
+      );
+    else {
+      setMappingVal([]);
+    }
+  };
+
   return (
     <div>
       <ToDoorSearch />
@@ -203,7 +243,12 @@ function ManageRiders(props) {
         </Typography>
       </div> */}
       <div className="flex items-end mr-3 mt-12 w-3/6">
-        <div className="mr-4">
+        <div
+          className="mr-4 hover:cursor-pointer"
+          onClick={() => {
+            newsDisplay(allBikez, false);
+          }}
+        >
           <WallCards
             className="mr-3"
             rider={false}
@@ -237,18 +282,30 @@ function ManageRiders(props) {
             </div>
           </div>
           <div className="flex">
-            <div className="">
+            <div
+              className="hover:cursor-pointer"
+              onClick={() => {
+                newsDisplay(totalVerifiedUsers, true);
+              }}
+            >
               <WallCards
                 short={true}
                 name="Verified"
                 count={companyStatistics?.verified_rider}
               />
             </div>
-            <WallCards
-              short={true}
-              name="Un-Verified"
-              count={companyStatistics?.unverified_rider}
-            />
+            <div
+              className="hover:cursor-pointer"
+              onClick={() => {
+                newsDisplay(totalUnverifiedUsers, true);
+              }}
+            >
+              <WallCards
+                short={true}
+                name="Un-Verified"
+                count={companyStatistics?.unverified_rider}
+              />
+            </div>
           </div>
         </div>
 
@@ -257,11 +314,12 @@ function ManageRiders(props) {
           <WallCards name='Active vehicles' count='8'/>
           <WallCards name='Earnings' count='3,000,000'/> */}
       </div>
-
       <Typography variant="h5" className="font-bold mt-8 text-primary-main">
         All Riders
       </Typography>
 
+
+      
       {/* <nav className="flex justify-center">
         <ul className="flex">
           {pageNo > 1 && (
@@ -303,7 +361,9 @@ function ManageRiders(props) {
           )}
         </ul>
       </nav> */}
-      {allRiders?.map((e, idx) => (
+      {/* ( (mappingVal.length && mappingVal) || // (mappingValCompany.length &&
+      mappingValCompany) || totalCompanies ) */}
+      {((mappingVal.length && mappingVal) || allRiders)?.map((e, idx) => (
         <ManageCompaniesTable
           deleteBikes={deleteBikes}
           tableArray={e}
@@ -353,7 +413,6 @@ function ManageRiders(props) {
           )}
         </ul>
       </nav>
-
       {/* <div className="flex justify-between my-7">
                         <ManageCompanyCard/>
                         <ManageCompanyCard/>
