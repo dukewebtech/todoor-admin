@@ -221,15 +221,15 @@ function ManageCompaniesTable(props) {
               {props?.tableArray?.info?.verified
                 ? "Verified"
                 : !props?.tableArray?.info?.verified &&
-                  !props?.tableArray?.info?.companyRegistrationPhotoUrl &&
-                  !props?.tableArray?.info?.idPhotoUrl
+                  !props?.tableArray?.info?.driverLicenceUrl &&
+                  !props?.tableArray?.info?.bikePhotoUrl
                 ? "No Document Uploaded"
                 : !props?.tableArray?.info?.verified &&
-                  !props?.tableArray?.info?.idPhotoUrl
-                ? "ID Not uploaded"
+                  !props?.tableArray?.info?.driverLicenceUrl
+                ? "Driver's Licence Not uploaded"
                 : !props?.tableArray?.info?.verified &&
-                  !props?.tableArray?.info?.companyRegistrationPhotoUrl
-                ? "CAC not uploaded"
+                  !props?.tableArray?.info?.bikePhotoUrl
+                ? "Bike Photo not uploaded"
                 : "Pending Verification"}
             </Typography>
           </div>
@@ -343,7 +343,9 @@ function ManageCompaniesTable(props) {
                   {!user?.verified && (
                     <div class="flex gap-5">
                       <Button
-                        disabled={!user?.idPhotoUrl || !user?.companyRegistrationPhotoUrl}
+                        disabled={
+                          !user?.driverLicenceUrl || !user?.bikePhotoUrl
+                        }
                         onClick={() => approveDecline(true, user?._id)}
                         className="bg-green-500"
                       >
@@ -403,41 +405,10 @@ function ManageCompaniesTable(props) {
                 </div>
               </div>
               <div class="flex flex-col gap-4 mt-4 w-1/2">
-                <div className="grid grid-cols-2 gap-5 items-center">
-                  <Typography className="font-semibold">ID:</Typography>
-                  {!user?.idPhotoUrl ? (
-                    <div className="w-full flex flex-col justify-start items-start gap-5">
-                      <Typography className="text-yellow-400" variant="">
-                        Not Yet Uploaded.
-                      </Typography>
-                    </div>
-                  ) : (
-                    <Button
-                      className="text-white italic bg-primary-main"
-                      variant=""
-                    >
-                      <a href={user?.idPhotoUrl} target="_blank">
-                        {" "}
-                        View Id.
-                      </a>
-                    </Button>
-                  )}
-                  {/* {user?.idPhotoUrl?.endsWith(".pdf") ? (
-                    <a href={user?.idPhotoUrl} target="_blank">
-                      <img className="w-full h-32  border-none" src={pdf} />
-                    </a>
-                  ) : (
-                    <a href={user?.idPhotoUrl} target="_blank">
-                      <img
-                        className="w-[300px] h-32  border-none"
-                        src={user?.idPhotoUrl}
-                      />
-                    </a> 
-                  )}*/}
-                </div>
+               
                 <div className="grid grid-cols-2 gap-5 items-center">
                   <Typography className="font-semibold ">
-                    CAC Document:
+                    Driver's Licence Document:
                   </Typography>
                   {/* {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
                     <a href={user?.companyRegistrationPhotoUrl} target="_blank">
@@ -451,7 +422,7 @@ function ManageCompaniesTable(props) {
                       />
                     </a>
                   )} */}
-                  {!user?.companyRegistrationPhotoUrl ? (
+                  {!user?.driverLicenceUrl ? (
                     <div className="w-full flex flex-col justify-start items-start gap-5">
                       <Typography className="text-yellow-400" variant="">
                         Not Yet Uploaded.
@@ -459,14 +430,44 @@ function ManageCompaniesTable(props) {
                     </div>
                   ) : (
                     <Button
-                      className="text-white italic bg-primary-main minw-"
+                      className="text-white italic bg-primary-main min-w-[170px]"
                       variant=""
                     >
-                      <a
-                        href={user?.companyRegistrationPhotoUrl}
-                        target="_blank"
-                      >
-                        View CAC
+                      <a href={user?.driverLicenceUrl} target="_blank">
+                        View Driver's Liscence
+                      </a>
+                    </Button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-5 items-center">
+                  <Typography className="font-semibold ">
+                    Bike Photo:
+                  </Typography>
+                  {/* {user?.companyRegistrationPhotoUrl?.endsWith(".pdf") ? (
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img className="w-full h-32 border-none" src={pdf} />
+                    </a>
+                  ) : (
+                    <a href={user?.companyRegistrationPhotoUrl} target="_blank">
+                      <img
+                        className="w-[300px] h-32  border-none"
+                        src={user?.companyRegistrationPhotoUrl}
+                      />
+                    </a>
+                  )} */}
+                  {!user?.bikePhotoUrl ? (
+                    <div className="w-full flex flex-col justify-start items-start gap-5">
+                      <Typography className="text-yellow-400" variant="">
+                        Not Yet Uploaded.
+                      </Typography>
+                    </div>
+                  ) : (
+                    <Button
+                      className="text-white italic bg-primary-main min-w-[170px]"
+                      variant=""
+                    >
+                      <a href={user?.bikePhotoUrl} target="_blank">
+                        View Bike Photo
                       </a>
                     </Button>
                   )}
