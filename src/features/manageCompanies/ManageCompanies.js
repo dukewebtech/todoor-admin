@@ -131,6 +131,8 @@ function ManageCompanies(props) {
     tripsCompleted: "-",
     phoneNo: e?.phoneNo,
     status: e?.currTripState,
+    verified: e?.verified,
+    info: e,
   }));
 
   const tableArray = [
@@ -519,7 +521,7 @@ function ManageCompanies(props) {
           </div>
 
           {tabloid?.map((e) => (
-            <ManageCompaniesTable tableArray={e} />
+            <ManageCompaniesTable tableArray={e} info={e?.info} />
           ))}
 
           {tabloid.length < 1 && (

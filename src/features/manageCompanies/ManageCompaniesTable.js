@@ -162,6 +162,7 @@ function ManageCompaniesTable(props) {
   };
 
   useEffect(() => {
+    console.log(props?.info)
     setUser(props?.info);
   }, [props?.tableArray]);
 
