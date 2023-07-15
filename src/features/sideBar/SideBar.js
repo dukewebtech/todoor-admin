@@ -76,6 +76,14 @@ const currentUrl = location.pathname;
       imageboolean: false,
     },
     {
+      name: "Manage Customers",
+      d: RouteEnum.MANAGE_CUSTOMERS,
+      image: rider,
+      color: false,
+      image2: riderW,
+      imageboolean: false,
+    },
+    {
       name: "Trips",
       d: RouteEnum.TRIPS,
       image: trips,

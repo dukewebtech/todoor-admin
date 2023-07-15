@@ -8,6 +8,7 @@ import Modals from "common/Modal";
 import { getTextFieldFormikProps } from "utils/FormikUtils";
 import { post, get, put } from "services/fetch";
 import pdf from "images/pdf.png";
+import moment from "moment";
 
 import { HiOutlineTrash } from "react-icons/hi";
 import { TbMessage2, TbPhoneCall } from "react-icons/tb";
@@ -161,6 +162,24 @@ function ManageCompaniesTable(props) {
     }
   };
 
+  const deleteRider = async (companyId, message) => {
+    const res = await delete({
+          endpoint: `api/super-admin/deleteRider?userId=${companyId}`,
+          //  body: { ...payload },
+          auth: true,
+        })
+
+    if (res.data.success) {
+      props?.getBikes();
+      enqueueSnackbar(message?message:res?.data?.message, { variant: "succes" });
+    } else {
+      console.log(res);
+      enqueueSnackbar(res?.data?.message, { variant: "error" });
+      props?.getBikes();
+
+    }
+  };
+
   useEffect(() => {
     console.log(props?.info)
     setUser(props?.info);
@@ -174,7 +193,7 @@ function ManageCompaniesTable(props) {
           onClick={openBelow}
           style={{ border: "1px solid #DADADA" }}
           className={
-            props?.tableArray?.verified
+            props?.tableArray?.verified || props?.suspendHide
               ? " cursor-pointer mt-2 px-2 w-full flex border2 background-table min-h-[50%]"
               : " cursor-pointer mt-2 px-2 w-full flex border2 bg-[#FFCD0061] min-h-[50%]"
           }
@@ -189,6 +208,9 @@ function ManageCompaniesTable(props) {
               <p className="medium-size">Name</p>
               <Typography variant="" class="text-sm">
                 {props?.tableArray?.name}
+              </Typography>
+              <Typography variant="" class="text-[10px]">
+                '{props?.tableArray?.companyName}'
               </Typography>
             </div>
           </div>
@@ -286,27 +308,30 @@ function ManageCompaniesTable(props) {
                 Call
               </Button>
             </div>
-            <div className="flex justify-between items-center">
-              <Button
-                // onClick={() => openModal(true)}
-                onClick={() =>
-                  approveDecline(false, user?._id, "user suspended")
-                }
-                style={{ backgroundColor: "#DCDCDC", color: "black" }}
-                className="mr-2 px-6 min-w-[110px] ml-2"
-              >
-                Suspend driver
-              </Button>
-              {/* <Button className='px-6 min-w-[110px] ml-2'>Call</Button> */}
-              <HiOutlineTrash
-                onClick={() => openModal(false, props?.tableArray?.userId)}
-                style={{
-                  fontSize: "26px",
-                  cursor: "pointer",
-                  color: "#888888",
-                }}
-              />
-            </div>
+            {!props?.suspendHide && (
+              // <button>Show Button</button>
+              <div className="flex justify-between items-center">
+                <Button
+                  // onClick={() => openModal(true)}
+                  onClick={() =>
+                    approveDecline(false, user?._id, "user suspended")
+                  }
+                  style={{ backgroundColor: "#DCDCDC", color: "black" }}
+                  className="mr-2 px-6 min-w-[110px] ml-2"
+                >
+                  Suspend driver
+                </Button>
+                {/* <Button className='px-6 min-w-[110px] ml-2'>Call</Button> */}
+                <HiOutlineTrash
+                  onClick={() => openModal(false, props?.tableArray?.userId)}
+                  style={{
+                    fontSize: "26px",
+                    cursor: "pointer",
+                    color: "#888888",
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
         <Modals
@@ -341,14 +366,14 @@ function ManageCompaniesTable(props) {
                   <Typography className="font-bold mb-5" variant="h5">
                     {user?.fname}
                   </Typography>
-                  {!user?.verified && (
+                  {!user?.verified && !props?.suspendHide && (
                     <div class="flex gap-5">
                       <Button
                         disabled={
                           !user?.driverLicenceUrl || !user?.bikePhotoUrl
                         }
                         onClick={() => approveDecline(true, user?._id)}
-                        className="bg-green-500"
+                        className="bg-green-500 text-white"
                       >
                         Approve
                       </Button>
@@ -357,6 +382,12 @@ function ManageCompaniesTable(props) {
                         className="bg-red-500"
                       >
                         Decline
+                      </Button>
+                      <Button
+                        onClick={() => deleteRider(user?._id)}
+                        className="bg-black/10"
+                      >
+                        <span class="text-black">Delete</span>
                       </Button>
                     </div>
                   )}
@@ -392,6 +423,9 @@ function ManageCompaniesTable(props) {
                   <Typography className="font-semibold">
                     Email address:
                   </Typography>
+                  <Typography className="font-semibold">
+                    Date of Birth:
+                  </Typography>
                   {/* <Typography className="font-semibold">ID Card:</Typography>
                   <Typography className="font-semibold">
                     Last Login Image
@@ -401,6 +435,7 @@ function ManageCompaniesTable(props) {
                   <Typography>{user?.city}</Typography>
                   <Typography>{user?.phoneNo}</Typography>
                   <Typography>{user?.email}</Typography>
+                  <Typography>{moment(user?.dob).format("ll")}</Typography>
                   {/* <Typography>{"****"}</Typography>
                   <Typography>{"***"}</Typography> */}
                 </div>

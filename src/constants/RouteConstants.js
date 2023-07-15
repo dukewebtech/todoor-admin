@@ -7,6 +7,7 @@ export const RouteEnum = {
   SIGNUPCLIENT: "/signup-client",
   MANAGE_COMPANIES: "/manage-companies",
   MANAGE_RIDERS: "/manage-riders",
+  MANAGE_CUSTOMERS: "/manage-customers",
   TRIPS: "/trips",
   MAPS: "/maps",
   SUPPORT: "/support",

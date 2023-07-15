@@ -111,7 +111,7 @@ function ManageCompanyCard({ companyDetails, handleShow, companyId }) {
           >
             <Avatar
               sx={{ width: 70, height: 70 }}
-              src={companyDetails?.profileUrl}
+              src={companyDetails?.profileUrl}  
             />
             <div
               className="ml-2 text-left"

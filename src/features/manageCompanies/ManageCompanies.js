@@ -75,11 +75,12 @@ function ManageCompanies(props) {
   const [pageNo, setPageNo] = useState(1);
 
   const handleShow = (verified) => {
-    if (verified) {
-      setShow(!show);
-    } else {
-      setOpens(true);
-    }
+    // if (verified) {
+    //   setShow(!show);
+    // } else {
+    //   setOpens(true);
+    // }
+    setOpens(true);
     // console.log("jo(truehn");
   };
   const history = useNavigate();
@@ -446,7 +447,7 @@ function ManageCompanies(props) {
       {show && (
         <div>
           <div
-            onClick={handleShow}
+            onClick={() => setShow(!show)}
             className="flex items-center mb-8 cursor-pointer w-16 p-2"
           >
             <div
@@ -472,7 +473,7 @@ function ManageCompanies(props) {
               {companyNames}
             </Typography>
           </div>
-          <div className="flex ">
+          <div className="flex justify-between">
             <div className="flex items-center  mt-8 border2 p-2">
               <NewWallCards
                 dashboard={true}
@@ -572,6 +573,19 @@ function ManageCompanies(props) {
                       </Button>
                     </div>
                   )}
+                  {user?.verified && (
+                    <div class="flex gap-5">
+                      <Button
+                        onClick={() => {
+                          setShow(!show);
+                          setOpens(false);
+                        }}
+                        className="bg-black/30"
+                      >
+                        View Company
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               <Divider className="my-8" />
@@ -597,6 +611,7 @@ function ManageCompanies(props) {
               <Divider className="my-8" /> */}
               <div class="flex gap-16 ">
                 <div className="flex flex-col gap-3 font-semibold">
+                  {/* <Typography className="font-semibold">Company Name:</Typography> */}
                   <Typography className="font-semibold">Address:</Typography>
                   <Typography className="font-semibold">
                     Phone Number:
@@ -604,11 +619,25 @@ function ManageCompanies(props) {
                   <Typography className="font-semibold">
                     Email address:
                   </Typography>
+                  <Typography className="font-semibold">
+                    Country:
+                  </Typography>
+                  <Typography className="font-semibold">
+                    State:
+                  </Typography>
+                  <Typography className="font-semibold">
+                    City:
+                  </Typography>
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Typography>{user?.city}</Typography>
+                  {/* <Typography>{user?.companyName ?? 'Company Name is Empty'}</Typography> */}
+                  <Typography>{user?.address}</Typography>
                   <Typography>{user?.phoneNo}</Typography>
                   <Typography>{user?.email}</Typography>
+                  <Typography>{user?.country}</Typography>
+                  <Typography>{user?.state}</Typography>
+                  <Typography>{user?.city}</Typography>
+                  {/* <Typography>{user?.dob}</Typography> */}
                 </div>
               </div>
               <div class="flex flex-col gap-4 mt-4 w-1/2">

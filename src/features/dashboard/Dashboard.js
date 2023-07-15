@@ -51,6 +51,7 @@ import SuperAdminApi from "apis/UserApi";
 function Signup(props) {
   const [userType, setUserType] = React.useState("");
   const [show, setshow] = React.useState(false);
+  const [dataType, setdataType] = React.useState('companies');
   const [filtered, setFiltered] = React.useState([]);
 
   //  const getUserStatsQueryResult = UserApi.useGetStatsQuery();
@@ -111,6 +112,10 @@ console.log(companyStatistics);
     return x?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  const handleTableDataSwitch = (type) => {
+    setdataType(type);
+  };
+
   return (
     <div>
       <div className="">
@@ -123,32 +128,44 @@ console.log(companyStatistics);
         </Typography>
       </div>
       <div className="flex justify-between mt-4">
-        <div className="mr-3">
+        <div
+          onClick={() => handleTableDataSwitch('companies')}
+          className="mr-3">
           <WallCards
             dashboard={true}
-            green={true}
+            green={dataType === 'companies' ? true : false}
             name="Total Companies"
             count={companyStatistics && companyStatistics?.total_company|| 0}
           />
         </div>
-        <div className="mr-3">
+        <div 
+          onClick={() => handleTableDataSwitch('riders')}
+          className="mr-3">
           <WallCards
+            green={dataType === 'riders' ? true : false}
             dashboard={true}
             name="Total Riders"
             count={companyStatistics && companyStatistics?.total_riders|| 0}
           />
         </div>
-        <div className="mr-3">
+        <div 
+          onClick={() => handleTableDataSwitch('trips')}
+          className="mr-3">
           <WallCards
+            green={dataType === 'trips' ? true : false}
             dashboard={true}
-            name="Rides in progress"
+            name="Active Trips"
             count={companyStatistics && companyStatistics?.rider_in_progress|| 0}
           />
         </div>
-        <div className="mr-3">
+        <div 
+          onClick={() => handleTableDataSwitch('customers')}
+          className="mr-3">
           <WallCards
+            green={dataType === 'customers' ? true : false}
+            onClick={() => handleTableDataSwitch('customers')}
             dashboard={true}
-            name="Users"
+            name="Customers"
             count={companyStatistics && companyStatistics?.active_bikes|| 0}
           />
         </div>
@@ -176,7 +193,7 @@ console.log(companyStatistics);
         </div>
       </div>
       <div>
-        <DashboardTable riders={totalRiders} />
+        <DashboardTable riders={totalRiders} companies={totalCompanies} customers={totalCustomers} tableType={dataType} />
       </div>
     </div>
   );

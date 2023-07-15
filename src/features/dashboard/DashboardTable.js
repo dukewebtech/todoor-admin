@@ -54,7 +54,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import ToDoorSearch from "common/ToDoorSearch";
 import moment from "moment";
 
-function Trips({ riders }) {
+function Trips({ riders, companies, customers, tableType }) {
   const [age, setAge] = React.useState("");
   const [tripz, setTripz] = React.useState([]);
   const [show, setShow] = React.useState(false);
@@ -74,13 +74,21 @@ function Trips({ riders }) {
   });
   const totalTrips = getAllCompanyQueryResult?.data;
   let trips = totalTrips;
+  console.log('++___+_+_+_+')
+  console.log(totalTrips)
   //  setTrips(totalTrips)
   useEffect(() => {
     // if (trips.length > 0) setTripz(trips);
     setTripz(totalTrips);
   }, [totalTrips]);
 
+  console.log('++___+_+_+_+ rider')
+
   console.log(riders);
+  console.log('------ customer')
+  console.log(customers);
+  console.log('------ company')
+  console.log(companies);
 
   const getRider = (id) => {
     // console.log(id)
@@ -247,7 +255,426 @@ function Trips({ riders }) {
 
   return (
     <div>
-      {!show && (
+      {(!show && tableType === 'companies' ) && (
+        <div>
+          <div
+            className="flex justify-between mb-8 items-center"
+            style={{ backgroundColor: "white" }}
+          >
+            {/* <img src = {gigLogo}/> */}
+
+            {/* <div>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="flex-between">
+                  <DatePicker
+                    className=" mr-8 w-full"
+                    // label="Basic example"
+                    // value={start_date}
+                    onChange={(newValue) => {
+                      // console.log(newValue)
+                      // setWorkList({ ...workList, start_date: newValue });
+                      // setStart_date(newValue);
+                      // setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </div>
+              </LocalizationProvider>
+            </div> */}
+          </div>
+
+          <div
+            sx={{ minWidth: 650, backgroundColor: "white" }}
+            aria-label="simple table"
+          >
+            <div
+              //   onClick={openBelow}
+              style={{ border: "1px solid #DADADA" }}
+              className=" cursor-pointer mt-2 flex border2  min-h-[50%]"
+            >
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Company Name</h6>
+                <Typography variant="h6"></Typography>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Location</h6>
+                {/* <Typography variant="h6">{companies?.company}</Typography> */}
+              </div>
+
+              <div className="w-[19.11%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Phone Number</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Email</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Date</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Status</h6>
+              </div>
+
+              {/* *Put back Action */}
+
+              {/* <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Action</h6>
+              </div> */}
+            </div>
+            <div className="mt-3 ">
+              {companies?.map((row, idx) => (
+                <div
+                  className="flex"
+                  key={idx}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <div className="w-[19%] border3b px-3 py-3  text-center">
+                    {row?.fname}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                  {row?.country} {row?.state ? ', '+row?.state : ''} {row?.city ? ', '+row?.city : ''}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    {row?.phoneNo}
+                  </div>
+                  <div className="w-[19.11%]  px-3 py-3  border3b text-center">
+                    {row?.email}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
+                      {moment(row?.created_at).format("MMMM DD, YYYY")} 
+                    </p>
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <Button>{row?.verified ? 'Verified' : 'Not Verified'}</Button>
+                  </div>
+
+                  {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </div> */}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* <Table
+            sx={{ minWidth: 650, backgroundColor: "#EBEBEB" }}
+            aria-label="simple table"
+          >
+            <TableHead
+              sx={{
+                padding: "100px",
+                backgroundColor: "#EBEBEB",
+                border: "2px solid red",
+              }}
+              className="mb-4"
+            >
+              <TableRow sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Origin
+                </TableCell>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Destination
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Rider
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Order ID&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Status&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Fee&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Departure Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Arrival Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Action&nbsp;(g)
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.origin}
+                  </TableCell>
+                  <TableCell align="right">{row.destination}</TableCell>
+                  <TableCell align="right">{row.rider}</TableCell>
+                  <TableCell align="right">{row.orderId}</TableCell>
+                  <TableCell align="right">{row.status}</TableCell>
+                  <TableCell align="right">{row.fee}</TableCell>
+                  <TableCell align="right">{row.departureDate}</TableCell>
+                  <TableCell align="right">{row.arrivalDate}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table> */}
+        </div>
+      )}
+      {(!show && tableType === 'riders' ) && (
+        <div>
+          <div
+            className="flex justify-between mb-8 items-center"
+            style={{ backgroundColor: "white" }}
+          >
+            {/* <img src = {gigLogo}/> */}
+
+            {/* <div>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="flex-between">
+                  <DatePicker
+                    className=" mr-8 w-full"
+                    // label="Basic example"
+                    // value={start_date}
+                    onChange={(newValue) => {
+                      // console.log(newValue)
+                      // setWorkList({ ...workList, start_date: newValue });
+                      // setStart_date(newValue);
+                      // setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </div>
+              </LocalizationProvider>
+            </div> */}
+          </div>
+
+          <div
+            sx={{ minWidth: 650, backgroundColor: "white" }}
+            aria-label="simple table"
+          >
+            <div
+              //   onClick={openBelow}
+              style={{ border: "1px solid #DADADA" }}
+              className=" cursor-pointer mt-2 flex border2  min-h-[50%]"
+            >
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Full Name</h6>
+                <Typography variant="h6" className="text-[10px]">Company Name</Typography>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Email</h6>
+                <Typography variant="h6"></Typography>
+              </div>
+
+              <div className="w-[19.11%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Phone Number</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Location</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Reg Date</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Status</h6>
+              </div>
+
+              {/* *Put back Action */}
+
+              {/* <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Action</h6>
+              </div> */}
+            </div>
+            <div className="mt-3 ">
+              {riders?.map((row, idx) => (
+                <div
+                  className="flex"
+                  key={idx}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <div className="w-[19%] border3b px-3 py-3  text-center">
+                    <p className="font-bold">{row?.fname}</p>
+                    <p className="text-[10px]">{row?.companyName}</p>
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    {row?.email}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    {row?.phoneNo}
+                  </div>
+                  <div className="w-[19.11%]  px-3 py-3  border3b text-center">
+                    {row?.country} {row?.state ? ', '+row?.state : ''} {row?.city ? ', '+row?.city : ''}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
+                      {moment(row?.created_at).format("MMMM DD, YYYY")}
+                    </p>
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <Button>{row?.verified ? 'Verified' : 'Not Verified'}</Button>
+                  </div>
+
+                  {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </div> */}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* <Table
+            sx={{ minWidth: 650, backgroundColor: "#EBEBEB" }}
+            aria-label="simple table"
+          >
+            <TableHead
+              sx={{
+                padding: "100px",
+                backgroundColor: "#EBEBEB",
+                border: "2px solid red",
+              }}
+              className="mb-4"
+            >
+              <TableRow sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Origin
+                </TableCell>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Destination
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Rider
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Order ID&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Status&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Fee&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Departure Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Arrival Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Action&nbsp;(g)
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.origin}
+                  </TableCell>
+                  <TableCell align="right">{row.destination}</TableCell>
+                  <TableCell align="right">{row.rider}</TableCell>
+                  <TableCell align="right">{row.orderId}</TableCell>
+                  <TableCell align="right">{row.status}</TableCell>
+                  <TableCell align="right">{row.fee}</TableCell>
+                  <TableCell align="right">{row.departureDate}</TableCell>
+                  <TableCell align="right">{row.arrivalDate}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table> */}
+        </div>
+      )}
+      {(!show && tableType === 'trips' ) && (
         <div>
           <div
             className="flex justify-between mb-8 items-center"
@@ -342,6 +769,216 @@ function Trips({ riders }) {
                   </div>
                   <div className="w-[19%]  px-3 py-3  border3b text-center">
                     <Button>Successful</Button>
+                  </div>
+
+                  {/* <div className="w-[15%]  px-3 py-3  border3b text-center">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </div> */}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* <Table
+            sx={{ minWidth: 650, backgroundColor: "#EBEBEB" }}
+            aria-label="simple table"
+          >
+            <TableHead
+              sx={{
+                padding: "100px",
+                backgroundColor: "#EBEBEB",
+                border: "2px solid red",
+              }}
+              className="mb-4"
+            >
+              <TableRow sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Origin
+                </TableCell>
+                <TableCell sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}>
+                  Destination
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Rider
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Order ID&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Status&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Fee&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Departure Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Arrival Date&nbsp;(g)
+                </TableCell>
+                <TableCell
+                  sx={{ marginBottom: 5, backgroundColor: "#EBEBEB" }}
+                  align="right"
+                >
+                  Action&nbsp;(g)
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.origin}
+                  </TableCell>
+                  <TableCell align="right">{row.destination}</TableCell>
+                  <TableCell align="right">{row.rider}</TableCell>
+                  <TableCell align="right">{row.orderId}</TableCell>
+                  <TableCell align="right">{row.status}</TableCell>
+                  <TableCell align="right">{row.fee}</TableCell>
+                  <TableCell align="right">{row.departureDate}</TableCell>
+                  <TableCell align="right">{row.arrivalDate}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      onClick={() => {
+                        handleShow(row);
+                      }}
+                    >
+                      View Route
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table> */}
+        </div>
+      )}
+      {(!show && tableType === 'customers' ) && (
+        <div>
+          <div
+            className="flex justify-between mb-8 items-center"
+            style={{ backgroundColor: "white" }}
+          >
+            {/* <img src = {gigLogo}/> */}
+
+            {/* <div>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="flex-between">
+                  <DatePicker
+                    className=" mr-8 w-full"
+                    // label="Basic example"
+                    // value={start_date}
+                    onChange={(newValue) => {
+                      // console.log(newValue)
+                      // setWorkList({ ...workList, start_date: newValue });
+                      // setStart_date(newValue);
+                      // setValue(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </div>
+              </LocalizationProvider>
+            </div> */}
+          </div>
+
+          <div
+            sx={{ minWidth: 650, backgroundColor: "white" }}
+            aria-label="simple table"
+          >
+            <div
+              //   onClick={openBelow}
+              style={{ border: "1px solid #DADADA" }}
+              className=" cursor-pointer mt-2 flex border2  min-h-[50%]"
+            >
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Full Name</h6>
+                {/* <Typography variant="h6" className="text-[10px]">Company Name</Typography> */}
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Email</h6>
+                <Typography variant="h6"></Typography>
+              </div>
+
+              <div className="w-[19.11%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Phone Number</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Location</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Reg Date</h6>
+              </div>
+              <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Status</h6>
+              </div>
+
+              {/* *Put back Action */}
+
+              {/* <div className="w-[19%] text-center  px-3 py-3">
+                <h6 className="font-bold text-[#454647]">Action</h6>
+              </div> */}
+            </div>
+            <div className="mt-3 ">
+              {customers?.map((row, idx) => (
+                <div
+                  className="flex"
+                  key={idx}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    marginTop: 10,
+                    backgroundColor: "",
+                  }}
+                >
+                  <div className="w-[19%] border3b px-3 py-3  text-center">
+                    <p className="font-bold">{row?.fname}</p>
+                    {/* <p className="text-[10px]">{row?.companyName}</p> */}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    {row?.email}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    {row?.phoneNo}
+                  </div>
+                  <div className="w-[19.11%]  px-3 py-3  border3b text-center">
+                    {row?.country} {row?.state ? ', '+row?.state : ''} {row?.city ? ', '+row?.city : ''}
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <p className=" px-3 py-1 text-[#0C3BAA] font-semibold">
+                     {moment(row?.created_at).format("MMMM DD, YYYY")}
+                    </p>
+                  </div>
+                  <div className="w-[19%]  px-3 py-3  border3b text-center">
+                    <Button>{row?.verified ? 'Verified' : 'Not Verified'}</Button>
                   </div>
 
                   {/* <div className="w-[15%]  px-3 py-3  border3b text-center">

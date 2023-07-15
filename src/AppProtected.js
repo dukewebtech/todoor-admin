@@ -58,6 +58,10 @@ const ROUTES = configureRoutes([
     element: lazy(() => import("features/manageCompanies/ManageCompanies")),
   },
   {
+    path: RouteEnum.MANAGE_CUSTOMERS,
+    element: lazy(() => import("features/manageCustomers/ManageCustomers")),
+  },
+  {
     path: RouteEnum.MANAGE_RIDERS,
     element: lazy(() => import("features/manageRider/ManageRiders")),
   },
