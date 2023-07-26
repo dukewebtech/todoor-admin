@@ -44,6 +44,25 @@ import { AccountCircle } from "@mui/icons-material";
 
 function ToDoorSearch(props) {
   const [age, setAge] = React.useState("");
+  //update
+  const [searchInput, setSearchInput] = useState("");
+  const [searchRecords, setSearchRecords] = useState("");
+  // const [selectedData, setSelectedData] = useState("")
+
+  let records = props.records;
+
+  const handleInputChange = (event) => {
+    setSearchInput(event.target.value)
+    let searchValue = event.target.value.toLowerCase();
+    setSearchRecords(records.filter(record => record.fname.toLowerCase().includes(searchValue)));
+  };
+
+  const handleSearchSelect = (data) => {
+    setSearchInput("");
+    props.selectOption(data);
+  }
+  
+
   const handleChange = (event) => {
     setAge(event.target.value);
     console.log(event);
@@ -91,7 +110,7 @@ function ToDoorSearch(props) {
   // }
 
   return (
-    <div>
+    <div className="relative">
       {/* <span className="text-xs mr-1 opacity-50">
           <MdRefresh />
         </span> */}
@@ -107,7 +126,18 @@ function ToDoorSearch(props) {
         style={{ backgroundColor: "#EBEBEB", border: "none" }}
         className="w-[30%] mb-5 text-ssm"
         placeholder="Search Company "
+        value={searchInput}
+        onChange={(e) => handleInputChange(e)}
       />
+      { searchInput &&
+        <div className="absolute w-[400px] max-h-[200px] !bg-white z-10 overflow-auto">
+          {searchRecords.map(item => (
+            <button 
+            onClick={(e) => handleSearchSelect(item)}
+            className="py-2 px-3 text-left hover:bg-black/30 w-full" key={item.fname}>{item.fname}</button>
+          ))}
+        </div>
+      }
       <Divider className="mb-8" />
     </div>
   );

@@ -235,7 +235,7 @@ function ManageRiders(props) {
 
   return (
     <div>
-      <ToDoorSearch />
+      {/* <ToDoorSearch /> */}
       {/* <div className="flex items-center" style={{ backGroundColor: "#1E1E1E" }}>
         <img src={gigLogo} />
         <Typography variant="h5" className="font-bold ml-4 ">

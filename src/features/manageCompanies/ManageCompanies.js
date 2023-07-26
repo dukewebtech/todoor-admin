@@ -197,7 +197,9 @@ function ManageCompanies(props) {
     pageNo,
   });
   const totalCompanies = getAllCompanyQueryResult?.data?.data;
-  console.log(totalCompanies);
+
+  const getAllCompanyResults = UserApi.useGetAllQuery({userType: "company"});
+  const Companies = getAllCompanyResults?.data?.data;
 
   const getAllUnVerifiedQueryResult = UserApi.useGetAllVerifiedQuery({
     userType,
@@ -325,9 +327,19 @@ function ManageCompanies(props) {
     }
   };
 
+  const handleEvent = (data) => {
+    ridersUnderCompany(data?._id);
+    companyEarnings(data?._id);
+    setCompanyName(data?.fname);
+    setCompanyImage(data?.profileUrl);
+    setUser(data);
+
+    handleShow();
+  };
+
   return (
     <div>
-      <ToDoorSearch />
+      <ToDoorSearch records={Companies} selectOption={handleEvent} />
 
       {!show && (
         <div className="">

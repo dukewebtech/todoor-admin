@@ -256,7 +256,7 @@ function Trips(props) {
 
   return (
     <div>
-      <ToDoorSearch />
+      {/* <ToDoorSearch /> */}
       {!show && (
         <div>
           <div

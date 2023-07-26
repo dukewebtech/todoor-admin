@@ -125,7 +125,7 @@ function ManageRiders(props) {
 
   return (
     <div>
-      <ToDoorSearch />
+      {/* <ToDoorSearch /> */}
 
       <Button>
         <a href=" https://tawk.to/chat/6401e42f4247f20fefe3c351/1gqjm6n0q " target='_blank'>

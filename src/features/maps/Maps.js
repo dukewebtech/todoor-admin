@@ -329,7 +329,7 @@ function Trips(props) {
   };
   return isLoaded ? (
     <div className="w-full">
-      <ToDoorSearch />
+      {/* <ToDoorSearch /> */}
       {/* <Autocomplete>
             <input/>
         </Autocomplete> */}

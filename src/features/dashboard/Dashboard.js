@@ -122,7 +122,7 @@ console.log(companyStatistics);
         {/* <span className="text-xs mr-1 opacity-50">
           <MdRefresh />
         </span> */}
-        <ToDoorSearch />
+        {/* <ToDoorSearch /> */}
         <Typography variant="h5" className="font-bold">
           Welcome Back
         </Typography>

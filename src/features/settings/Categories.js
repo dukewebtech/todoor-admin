@@ -171,7 +171,7 @@ function Categories(props) {
 
   return (
     <div>
-      <ToDoorSearch />
+      {/* <ToDoorSearch /> */}
 
       {
         <div className=" mt-8 ">
